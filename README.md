@@ -1,20 +1,30 @@
 figjam
 ================
 
-Simple, Heroku-friendly Rails app configuration using `ENV` and a single YAML file.
+Simple, Rails app configuration using `ENV` and a single YAML file.
 
 ## Figjam origins
 
-Figjam is a direct fork of the [figaro](https://github.com/laserlemon/figaro) rubygem.
-However it chooses not to go down the more "ruby code" 2.x path that gem was taking, preferring to
-keep using hierarchical yaml files.
+Figjam started as a direct fork of the [figaro](https://github.com/laserlemon/figaro) rubygem.
 
-It can be used as a direct drop-in for the `figaro` gem. It even aliases the `Figaro` to `Figjam`
-module namespace for drop-in compatibility.
+There are some key differences in philosophy:
+
+1. Figjam chooses not to go down the more "use ruby for configuration" 2.x path that gem was taking,
+   preferring to keep using hierarchical yaml files.
+2. Figjam prefers that you *do* commit your application.yml to your repository, as long as you don't
+   put any credentials or other secrets in it. It encourages an ENV-with-code-change PR flow
+   that simplifies providing default ENV values for an application, as well as codified 
+   overrides per environment. These all, of course, can be overridden by a real ENV. 
+
+Given (2), it doesn't make sense to push ENV to Heroku from the application.yml file, so Heroku
+support has been removed.
+
+With those caveats, it can be used as a drop-in replacement for the `figaro` gem.
+It even aliases the `Figaro` to `Figjam` module namespace for drop-in compatibility.
 
 ## Why does Figjam exist?
 
-Figjam was written to make it easy to configure Rails applications.
+Figjam makes it easy to configure Rails applications.
 
 PRs to applications often need to come with default configuration values, but hardcoding these into
 software makes them impossible to change at runtime. However supplying them separately to an
@@ -32,68 +42,51 @@ Add Figjam to your Gemfile and `bundle install`:
 gem "figjam"
 ```
 
-Figjam installation is easy:
+Then:
 
 ```bash
 $ bundle exec figjam install
 ```
 
-This creates a commented `config/application.yml` file and adds it to your
-`.gitignore`. Add your own configuration to this file and you're done!
+This creates a commented `config/application.yml` file which you can add default ENV to.
+Add your own configuration to this file for all environments, and any specific environment
+overrides.
 
 ### Example
 
-Given the following configuration file:
+Given the following configuration file, the default value at the top will be used unless
+RAILS_ENV matches any of the subsequent keys (like `test`, `prelive`, `produciton`).
 
 ```yaml
 # config/application.yml
 
-pusher_app_id: "2954"
-pusher_key: "7381a978f7dd7f9a1117"
-pusher_secret: "abdc3b896a0ffb85d373"
+GOOGLE_TAG_MANAGER_ID: GTM-12345
+
+test:
+  # Use ~ for "nil"
+  GOOGLE_TAG_MANAGER_ID: ~
+  
+prelive:
+  GOOGLE_TAG_MANAGER_ID: GTM-45678
+
+production:
+  GOOGLE_TAG_MANAGER_ID: GTM-98765
 ```
 
-You can configure [Pusher](http://pusher.com) in an initializer:
+You can then use those values in your app in an initializer, or in any other ruby code.
+Note, secrets are not to be provided by figjam.
 
-```ruby
-# config/initializers/pusher.rb
+eg:
+```
+# app/views/layouts/application.html.erb
 
-Pusher.app_id = ENV["pusher_app_id"]
-Pusher.key    = ENV["pusher_key"]
-Pusher.secret = ENV["pusher_secret"]
+<script>
+var gtm_id = <%= ENV.fetch("GOOGLE_TAG_MANAGER_ID") %> 
+</script>
 ```
 
 **Please note:** `ENV` is a simple key/value store. All values will be converted
 to strings. Deeply nested configuration structures are not possible.
-
-### Environment-Specific Configuration
-
-Oftentimes, local configuration values change depending on Rails environment. In
-such cases, you can add environment-specific values to your configuration file:
-
-```yaml
-# config/application.yml
-
-pusher_app_id: "2954"
-pusher_key: "7381a978f7dd7f9a1117"
-pusher_secret: "abdc3b896a0ffb85d373"
-
-test:
-  pusher_app_id: "5112"
-  pusher_key: "ad69caf9a44dcac1fb28"
-  pusher_secret: "83ca7aa160fedaf3b350"
-```
-
-You can also nullify configuration values for a specific environment:
-
-```yaml
-# config/application.yml
-
-google_analytics_key: "UA-35722661-5"
-
-test:
-  google_analytics_key: ~
-```
 
 ### Using `Figjam.env`
 
@@ -106,19 +99,19 @@ entirely a matter of personal preference.
 ```yaml
 # config/application.yml
 
-stripe_api_key: "sk_live_dSqzdUq80sw9GWmuoI0qJ9rL"
+GOOGLE_TAG_MANAGER_ID: "GTM-456789"
 ```
 
 ```ruby
-ENV["stripe_api_key"] # => "sk_live_dSqzdUq80sw9GWmuoI0qJ9rL"
-ENV.key?("stripe_api_key") # => true
-ENV["google_analytics_key"] # => nil
-ENV.key?("google_analytics_key") # => false
+ENV["GOOGLE_TAG_MANAGER_ID"] # => "GTM-456789"
+ENV.key?("GOOGLE_TAG_MANAGER_ID") # => true
+ENV["SOMETHING_ELSE"] # => nil
+ENV.key?("SOMETHING_ELSE") # => false
 
-Figjam.env.stripe_api_key # => "sk_live_dSqzdUq80sw9GWmuoI0qJ9rL"
-Figjam.env.stripe_api_key? # => true
-Figjam.env.google_analytics_key # => nil
-Figjam.env.google_analytics_key? # => false
+Figjam.env.google_tag_manager_id # => "GTM-456789"
+Figjam.env.google_tag_manager_id? # => true
+Figjam.env.something_else # => nil
+Figjam.env.something_else? # => false
 ```
 
 ### Required Keys
@@ -132,7 +125,7 @@ To proactively require configuration keys:
 ```ruby
 # config/initializers/figjam.rb
 
-Figjam.require_keys("pusher_app_id", "pusher_key", "pusher_secret")
+Figjam.require_keys("GOOGLE_TAG_MANAGER_ID")
 ```
 
 If any of the configuration keys above are not set, your application will raise
@@ -145,49 +138,8 @@ on `Figjam.env`:
 ```ruby
 # config/initializers/pusher.rb
 
-Pusher.app_id = Figjam.env.pusher_app_id!
-Pusher.key    = Figjam.env.pusher_key!
-Pusher.secret = Figjam.env.pusher_secret!
+Pusher.app_id = Figjam.env.google_tag_manager_id!
 ```
-
-### Deployment
-
-Figjam is written with deployment in mind. In fact, [Heroku](https://www.heroku.com)'s
-use of `ENV` for application configuration was the original inspiration for
-Figjam.
-
-#### Heroku
-
-Heroku already makes setting application configuration easy:
-
-```bash
-$ heroku config:set google_analytics_key=UA-35722661-5
-```
-
-Using the `figjam` command, you can set values from your configuration file all
-at once:
-
-```bash
-$ figjam heroku:set -e production
-```
-
-For more information:
-
-```bash
-$ figjam help heroku:set
-```
-
-#### Other Hosts
-
-If you're not deploying to Heroku, you have two options:
-
-* Generate a remote configuration file
-* Set `ENV` variables directly
-
-Generating a remote configuration file is preferred because of:
-
-* familiarity – Management of `config/application.yml` is like that of `config/database.yml`.
-* isolation – Multiple applications on the same server will not produce configuration key collisions.
 
 ## Is Figjam like [dotenv](https://github.com/bkeepers/dotenv)?
 
@@ -256,25 +208,9 @@ as long as the last three differences above exist, Figjam will continue to be
 developed as a more secure, more consistent, and more standards-compliant
 alternative to `secrets.yml`.
 
-### Heroku Configuration
-
-```bash
-$ figjam heroku:set -e production
-```
-
-For more information:
-
-```bash
-$ figjam help heroku:set
-```
-
-**NOTE:** The environment option is required for the `heroku:set` command. The
-Rake task in Figjam 0.7 used the default of "development" if unspecified.
-
 ### Spring Configuration
 
-If you're using Spring, either [stop](http://collectiveidea.com/blog/archives/2015/02/04/spring-is-dead-to-me)
-or add `config/application.yml` to the watch list:
+If you're using Spring add `config/application.yml` to the watch list:
 
 ```rb
 # config/spring.rb

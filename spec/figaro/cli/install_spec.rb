@@ -29,7 +29,6 @@ EOF
 
       expect(".gitignore").to have_file_content(%r(^/foo$))
       expect(".gitignore").to have_file_content(%r(^/bar$))
-      expect(".gitignore").to have_file_content(%r(^/config/application\.yml$))
     end
 
     it "respects path" do
