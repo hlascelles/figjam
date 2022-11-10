@@ -33,8 +33,6 @@ EOF
 
     it "respects path" do
       run_command_and_stop("figjam install -p env.yml")
-
-      expect(".gitignore").to have_file_content(%r(^/env\.yml$))
     end
   end
 

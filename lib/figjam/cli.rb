@@ -1,4 +1,5 @@
 require "thor"
+require "figjam/figaro_alias"
 
 module Figjam
   class CLI < Thor

@@ -1,5 +1,6 @@
 require "erb"
 require "yaml"
+require "figjam/figaro_alias"
 
 module Figjam
   class Application

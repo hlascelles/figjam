@@ -1,3 +1,5 @@
+require "figjam/figaro_alias"
+
 begin
   require "rails"
 rescue LoadError
