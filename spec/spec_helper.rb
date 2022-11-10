@@ -1,7 +1,7 @@
 require "bundler"
 Bundler.setup
 
-require "figaro"
+require "figjam"
 
 Bundler.require(:test)
 

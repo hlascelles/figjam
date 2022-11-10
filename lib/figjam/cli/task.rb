@@ -1,6 +1,6 @@
-require "figaro/application"
+require "figjam/application"
 
-module Figaro
+module Figjam
   class CLI < Thor
     class Task
       attr_reader :options
@@ -24,7 +24,7 @@ module Figaro
       end
 
       def application
-        @application ||= Figaro::Application.new(options)
+        @application ||= Figjam::Application.new(options)
       end
 
       if defined? Bundler

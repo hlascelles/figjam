@@ -1,7 +1,7 @@
-describe Figaro do
+describe Figjam do
   describe ".env" do
-    it "falls through to Figaro::ENV" do
-      expect(Figaro.env).to eq(Figaro::ENV)
+    it "falls through to Figjam::ENV" do
+      expect(Figjam.env).to eq(Figjam::ENV)
     end
   end
 
@@ -9,15 +9,15 @@ describe Figaro do
     let(:adapter) { double(:adapter) }
 
     it "defaults to the generic application adapter" do
-      expect(Figaro.adapter).to eq(Figaro::Application)
+      expect(Figjam.adapter).to eq(Figjam::Application)
     end
 
     it "is configurable" do
       expect {
-        Figaro.adapter = adapter
+        Figjam.adapter = adapter
       }.to change {
-        Figaro.adapter
-      }.from(Figaro::Application).to(adapter)
+        Figjam.adapter
+      }.from(Figjam::Application).to(adapter)
     end
   end
 
@@ -27,19 +27,19 @@ describe Figaro do
     let(:custom_application) { double(:custom_application) }
 
     before do
-      allow(Figaro).to receive(:adapter) { adapter }
+      allow(Figjam).to receive(:adapter) { adapter }
       allow(adapter).to receive(:new).with(no_args) { application }
     end
 
     it "defaults to a new adapter application" do
-      expect(Figaro.application).to eq(application)
+      expect(Figjam.application).to eq(application)
     end
 
     it "is configurable" do
       expect {
-        Figaro.application = custom_application
+        Figjam.application = custom_application
       }.to change {
-        Figaro.application
+        Figjam.application
       }.from(application).to(custom_application)
     end
   end
@@ -48,13 +48,13 @@ describe Figaro do
     let(:application) { double(:application) }
 
     before do
-      allow(Figaro).to receive(:application) { application }
+      allow(Figjam).to receive(:application) { application }
     end
 
     it "loads the application configuration" do
       expect(application).to receive(:load).once.with(no_args)
 
-      Figaro.load
+      Figjam.load
     end
   end
 
@@ -67,13 +67,13 @@ describe Figaro do
     context "when no keys are missing" do
       it "does nothing" do
         expect {
-          Figaro.require_keys("foo", "hello")
+          Figjam.require_keys("foo", "hello")
         }.not_to raise_error
       end
 
       it "accepts an array" do
         expect {
-          Figaro.require_keys(["foo", "hello"])
+          Figjam.require_keys(["foo", "hello"])
         }.not_to raise_error
       end
     end
@@ -81,8 +81,8 @@ describe Figaro do
     context "when keys are missing" do
       it "raises an error for the missing keys" do
         expect {
-          Figaro.require_keys("foo", "goodbye", "baz")
-        }.to raise_error(Figaro::MissingKeys) { |error|
+          Figjam.require_keys("foo", "goodbye", "baz")
+        }.to raise_error(Figjam::MissingKeys) { |error|
           expect(error.message).not_to include("foo")
           expect(error.message).to include("goodbye")
           expect(error.message).to include("baz")
@@ -91,8 +91,8 @@ describe Figaro do
 
       it "accepts an array" do
         expect {
-          Figaro.require_keys(["foo", "goodbye", "baz"])
-        }.to raise_error(Figaro::MissingKeys)
+          Figjam.require_keys(["foo", "goodbye", "baz"])
+        }.to raise_error(Figjam::MissingKeys)
       end
     end
   end

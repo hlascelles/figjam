@@ -1,4 +1,4 @@
-module Figaro
+module Figjam
   module Rails
     describe Application do
       describe "#default_path" do

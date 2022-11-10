@@ -1,18 +1,22 @@
-require "figaro/error"
-require "figaro/env"
-require "figaro/application"
+if Gem.loaded_specs.key?("figaro")
+  raise "The gem figjam is a replacement for figaro. Remove figaro from your Gemfile."
+end
 
-module Figaro
+require "figjam/error"
+require "figjam/env"
+require "figjam/application"
+
+module Figjam
   extend self
 
   attr_writer :adapter, :application
 
   def env
-    Figaro::ENV
+    Figjam::ENV
   end
 
   def adapter
-    @adapter ||= Figaro::Application
+    @adapter ||= Figjam::Application
   end
 
   def application
@@ -29,4 +33,4 @@ module Figaro
   end
 end
 
-require "figaro/rails"
+require "figjam/rails"

@@ -1,10 +1,10 @@
 require "thor"
 
-module Figaro
+module Figjam
   class CLI < Thor
-    # figaro install
+    # figjam install
 
-    desc "install", "Install Figaro"
+    desc "install", "Install Figjam"
 
     method_option "path",
       aliases: ["-p"],
@@ -12,13 +12,13 @@ module Figaro
       desc: "Specify a configuration file path"
 
     def install
-      require "figaro/cli/install"
+      require "figjam/cli/install"
       Install.start
     end
 
-    # figaro heroku:set
+    # figjam heroku:set
 
-    desc "heroku:set", "Send Figaro configuration to Heroku"
+    desc "heroku:set", "Send Figjam configuration to Heroku"
 
     method_option "app",
       aliases: ["-a"],
@@ -35,7 +35,7 @@ module Figaro
       desc: "Specify a Heroku git remote"
 
     define_method "heroku:set" do
-      require "figaro/cli/heroku_set"
+      require "figjam/cli/heroku_set"
       HerokuSet.run(options)
     end
   end

@@ -1,5 +1,3 @@
 #!/usr/bin/env ruby
 
-require "figaro/cli"
-
-Figaro::CLI.start
+require_relative "figjam"

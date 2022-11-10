@@ -1,4 +1,4 @@
-module Figaro
+module Figjam
   module ENV
     extend self
 

@@ -1,6 +1,6 @@
-require "figaro/cli/task"
+require "figjam/cli/task"
 
-module Figaro
+module Figjam
   class CLI < Thor
     class HerokuSet < Task
       def run

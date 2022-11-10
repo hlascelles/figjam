@@ -1,5 +1,5 @@
-describe Figaro::ENV do
-  subject(:env) { Figaro::ENV }
+describe Figjam::ENV do
+  subject(:env) { Figjam::ENV }
 
   before do
     ::ENV["HELLO"] = "world"
@@ -50,7 +50,7 @@ describe Figaro::ENV do
       end
 
       it "raises an error if no ENV key matches" do
-        expect { env.goodbye! }.to raise_error(Figaro::MissingKey)
+        expect { env.goodbye! }.to raise_error(Figjam::MissingKey)
       end
 
       it "respects a stubbed plain method" do

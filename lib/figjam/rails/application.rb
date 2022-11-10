@@ -1,6 +1,6 @@
-module Figaro
+module Figjam
   module Rails
-    class Application < Figaro::Application
+    class Application < Figjam::Application
       private
 
       def default_path

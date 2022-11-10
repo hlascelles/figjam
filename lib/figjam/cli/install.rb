@@ -1,6 +1,6 @@
 require "thor/group"
 
-module Figaro
+module Figjam
   class CLI < Thor
     class Install < Thor::Group
       include Thor::Actions

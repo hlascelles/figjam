@@ -1,4 +1,4 @@
-describe Figaro::Rails do
+describe Figjam::Rails do
   before do
     run_command_and_stop(<<-CMD)
       rails new example \
@@ -25,7 +25,7 @@ describe Figaro::Rails do
     end
 
     it "loads application.yml" do
-      run_command_and_stop("rails runner 'puts Figaro.env.foo'")
+      run_command_and_stop("rails runner 'puts Figjam.env.foo'")
 
       expect(all_stdout).to include("bar")
     end

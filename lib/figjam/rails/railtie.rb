@@ -1,8 +1,8 @@
-module Figaro
+module Figjam
   module Rails
     class Railtie < ::Rails::Railtie
       config.before_configuration do
-        Figaro.load
+        Figjam.load
       end
     end
   end

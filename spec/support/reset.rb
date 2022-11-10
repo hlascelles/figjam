@@ -4,8 +4,8 @@ RSpec.configure do |config|
   end
 
   config.before do
-    Figaro.adapter = nil
-    Figaro.application = nil
+    Figjam.adapter = nil
+    Figjam.application = nil
 
     # Restore the original state of ENV for each test
     ::ENV.keep_if { |k, _| $original_env_keys.include?(k) }

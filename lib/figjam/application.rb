@@ -1,7 +1,7 @@
 require "erb"
 require "yaml"
 
-module Figaro
+module Figjam
   class Application
     FIGARO_ENV_PREFIX = "_FIGARO_"
 
@@ -81,7 +81,7 @@ module Figaro
     end
 
     def non_string_configuration!(value)
-      warn "WARNING: Use strings for Figaro configuration. #{value.inspect} was converted to #{value.to_s.inspect}."
+      warn "WARNING: Use strings for Figjam configuration. #{value.inspect} was converted to #{value.to_s.inspect}."
     end
 
     def key_skipped!(key)

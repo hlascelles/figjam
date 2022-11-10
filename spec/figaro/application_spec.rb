@@ -1,6 +1,6 @@
 require "tempfile"
 
-module Figaro
+module Figjam
   describe Application do
     before do
       allow_any_instance_of(Application).to receive(:default_path) { "/path/to/app/config/application.yml" }
@@ -91,7 +91,7 @@ module Figaro
 
     describe "#configuration" do
       def yaml_to_path(yaml)
-        Tempfile.open("figaro") do |file|
+        Tempfile.open("figjam") do |file|
           file.write(yaml)
           file.path
         end

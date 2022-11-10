@@ -1,4 +1,4 @@
-module Figaro
+module Figjam
   class Error < StandardError; end
 
   class RailsNotInitialized < Error; end
