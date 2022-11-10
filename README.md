@@ -136,23 +136,19 @@ To require configuration keys lazily, reference the variables via "bang" methods
 on `Figjam.env`:
 
 ```ruby
-# config/initializers/pusher.rb
-
-Pusher.app_id = Figjam.env.google_tag_manager_id!
+gtm_id = Figjam.env.google_tag_manager_id!
 ```
 
 ## Is Figjam like [dotenv](https://github.com/bkeepers/dotenv)?
 
-Yes. Kind of.
-
-Figjam and dotenv were written around the same time to solve similar problems.
+Figjam and dotenv are similar:
 
 ### Similarities
 
 * Both libraries are useful for Ruby application configuration.
-* Both are popular and well maintained.
 * Both are inspired by Twelve-Factor App's concept of proper [configuration](http://12factor.net/config).
 * Both store configuration values in `ENV`.
+* Both can be used in and out of Rails.
 
 ### Differences
 
@@ -162,51 +158,14 @@ Figjam and dotenv were written around the same time to solve similar problems.
 * Configuration File Format
   * Figjam expects YAML containing key/value pairs.
   * Dotenv convention is a collection of `KEY=VALUE` pairs.
-* Security vs. Convenience
-  * Figjam convention is to never commit configuration files.
-  * Dotenv encourages committing configuration files containing development values.
-* Framework Focus
-  * Figjam was written with a focus on Rails development and conventions.
-  * Dotenv was written to accommodate any type of Ruby application.
 
-Either library may suit your configuration needs. It often boils down to
-personal preference.
+If you prefer your default configuration in one place where you can scan one file to see
+differences then you may prefer `figjam`.
 
 ## Is application.yml like [secrets.yml](https://github.com/rails/rails/blob/v4.1.0/railties/lib/rails/generators/rails/app/templates/config/secrets.yml)?
 
-Yes. Kind of.
-
-Rails 4.1 introduced the `secrets.yml` convention for Rails application
-configuration. Figjam predated the Rails 4.1 release by two years.
-
-### Similarities
-
-* Both are useful for Rails application configuration.
-* Both are popular and well maintained.
-* Both expect a single YAML file.
-
-### Differences
-
-* Configuration Access
-  * Figjam stores configuration values in `ENV`.
-  * Rails stores configuration values in `Rails.application.secrets`.
-* Configuration File Structure
-  * Figjam expects YAML containing key/value string pairs.
-  * Secrets may contain nested structures with rich objects.
-* Security vs. Convenience
-  * Figjam convention is to never commit configuration files.
-  * Secrets are committed by default.
-* Consistency
-  * Figjam uses `ENV` for configuration in every environment.
-  * Secrets encourage using `ENV` for production only.
-* Approach
-  * Figjam is inspired by Twelve-Factor App's concept of proper [configuration](http://12factor.net/config).
-  * Secrets are… not.
-
-The emergence of a configuration convention for Rails is an important step, but
-as long as the last three differences above exist, Figjam will continue to be
-developed as a more secure, more consistent, and more standards-compliant
-alternative to `secrets.yml`.
+No. Do not put secrets in `figjam` `application.yml` files! They are supposed to be committed
+to source control.
 
 ### Spring Configuration
 
