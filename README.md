@@ -1,30 +1,7 @@
 figjam
 ================
 
-Simple, Rails app configuration using `ENV` and a single YAML file.
-
-## Figjam origins
-
-Figjam started as a direct fork of the [figaro](https://github.com/laserlemon/figaro) rubygem.
-
-There are some key differences in philosophy:
-
-1. Figjam chooses not to go down the more "use ruby for configuration" 2.x path that gem was taking,
-   preferring to keep using hierarchical yaml files.
-2. Figjam prefers that you *do* commit your application.yml to your repository, as long as you don't
-   put any credentials or other secrets in it. It encourages an ENV-with-code-change PR flow
-   that simplifies providing default ENV values for an application, as well as codified 
-   overrides per environment. These all, of course, can be overridden by a real ENV. 
-
-Given (2), it doesn't make sense to push ENV to Heroku from the application.yml file, so Heroku
-support has been removed.
-
-With those caveats, it can be used as a drop-in replacement for the `figaro` gem.
-It even aliases the `Figaro` to `Figjam` module namespace for drop-in compatibility.
-
-## Why does Figjam exist?
-
-Figjam makes it easy to configure Rails applications.
+Figjam makes it easy to configure ruby and Rails apps `ENV` values by just using a single YAML file.
 
 PRs to applications often need to come with default configuration values, but hardcoding these into
 software makes them impossible to change at runtime. However supplying them separately to an
@@ -34,7 +11,8 @@ Figjam encourages you to commit default ENV values to a yaml file in your PRs. T
 loaded at runtime, but, crucially, can be overridden at any time by supplying a real ENV. This
 brings the ease of PR creation with the flexibility of runtime ENV changes.
 
-### Getting Started
+
+### Usage
 
 Add Figjam to your Gemfile and `bundle install`:
 
@@ -74,7 +52,6 @@ production:
 ```
 
 You can then use those values in your app in an initializer, or in any other ruby code.
-Note, secrets are not to be provided by figjam.
 
 eg:
 ```
@@ -84,6 +61,8 @@ eg:
 var gtm_id = <%= ENV.fetch("GOOGLE_TAG_MANAGER_ID") %> 
 </script>
 ```
+
+Note, secrets are not to be provided by figjam, so do not add them to your `application.yml`.
 
 **Please note:** `ENV` is a simple key/value store. All values will be converted
 to strings. Deeply nested configuration structures are not possible.
@@ -159,13 +138,13 @@ Figjam and dotenv are similar:
   * Figjam expects YAML containing key/value pairs.
   * Dotenv convention is a collection of `KEY=VALUE` pairs.
 
-If you prefer your default configuration in one place where you can scan one file to see
-differences then you may prefer `figjam`.
+If you prefer your default configuration in one place, where you can scan one file to see
+differences between environments, then you may prefer `figjam` over `dotenv`.
 
 ## Is application.yml like [secrets.yml](https://github.com/rails/rails/blob/v4.1.0/railties/lib/rails/generators/rails/app/templates/config/secrets.yml)?
 
-No. Do not put secrets in `figjam` `application.yml` files! They are supposed to be committed
-to source control.
+No. Do not put secrets in `figjam` `application.yml` files! That file supposed to be committed
+to source control, and should never contain secrets.
 
 ### Spring Configuration
 
@@ -179,6 +158,25 @@ If you're using Spring add `config/application.yml` to the watch list:
   config/application.yml
 ).each { |path| Spring.watch(path) }
 ```
+
+## Figjam origins
+
+Figjam started as a direct fork of the [figaro](https://github.com/laserlemon/figaro) rubygem.
+
+There are some key differences in philosophy:
+
+1. Figjam chooses not to go down the more "use ruby for configuration" 2.x path that gem was taking,
+   preferring to keep using hierarchical yaml files.
+2. Figjam prefers that you *do* commit your application.yml to your repository, as long as you don't
+   put any credentials or other secrets in it. It encourages an ENV-with-code-change PR flow
+   that simplifies providing default ENV values for an application, as well as codified 
+   overrides per environment. These all, of course, can be overridden by a real ENV. 
+
+Given (2), it doesn't make sense to push ENV to Heroku from the application.yml file, so Heroku
+support has been removed.
+
+With those caveats, it can be used as a drop-in replacement for the `figaro` gem.
+It even aliases the `Figaro` to `Figjam` module namespace for drop-in compatibility.
 
 ## How can I help?
 
