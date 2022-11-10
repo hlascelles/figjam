@@ -7,3 +7,4 @@ else
 
   Figjam.adapter = Figjam::Rails::Application
 end
+

@@ -1,8 +1,12 @@
 # encoding: utf-8
 
+lib = File.expand_path("lib", __dir__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require "figjam/version"
+
 Gem::Specification.new do |spec|
   spec.name    = "figjam"
-  spec.version = "1.2.0"
+  spec.version = Figjam::VERSION
 
   spec.authors       = ["Harry Lascelles"]
   spec.email         = ["harry@harrylascelles.com"]
