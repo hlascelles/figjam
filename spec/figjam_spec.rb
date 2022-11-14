@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe Figjam do
   describe ".env" do
     it "falls through to Figjam::ENV" do

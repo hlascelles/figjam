@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe Figjam::ENV do
   subject(:env) { Figjam::ENV }
 

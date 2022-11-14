@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe Figjam::Rails do
   before do
     run_command_and_stop(<<-CMD)
@@ -16,6 +18,14 @@ describe Figjam::Rails do
         --skip-bundle \
         --skip-webpack-install
       CMD
+
+    # Rails 7 doesn't expect the config.assets line, so comment it out or delete references to it
+    development_file = "tmp/aruba/example/config/environments/development.rb"
+    development_config = File.read(development_file)
+    File.write(development_file, development_config.gsub(" config.assets", " # config.assets"))
+    assets_initializer = "tmp/aruba/example/config/initializers/assets.rb"
+    File.delete(assets_initializer) if File.exist?(assets_initializer)
+
     cd("example")
   end
 

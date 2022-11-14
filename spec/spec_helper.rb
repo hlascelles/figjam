@@ -2,6 +2,7 @@ require "bundler"
 Bundler.setup
 
 require "figjam"
+require "pry-byebug"
 
 Bundler.require(:test)
 

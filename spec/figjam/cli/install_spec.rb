@@ -1,3 +1,5 @@
+require "spec_helper"
+
 describe "figjam install" do
   before do
     create_directory("example")

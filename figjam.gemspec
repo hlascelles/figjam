@@ -25,8 +25,17 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "thor", ">= 0.14.0", "< 2"
 
-  spec.add_development_dependency "bundler", ">= 1.7.0", "< 3"
-  spec.add_development_dependency "rake", ">= 10.4.0", "< 14"
+  spec.add_development_dependency "appraisal"
+  spec.add_development_dependency "aruba"
+  spec.add_development_dependency "bundler"
+  spec.add_development_dependency "fasterer"
+  spec.add_development_dependency "pry-byebug"
+  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rails"
+  spec.add_development_dependency "rspec"
+  spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "rubocop-rspec"
+  spec.add_development_dependency "sqlite3"
 
   spec.files = Dir["{bin,lib}/**/*"] + ["README.md"]
   spec.require_paths = ["lib"]
