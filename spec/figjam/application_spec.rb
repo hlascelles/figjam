@@ -232,20 +232,57 @@ test:
       }.from("bar").to("baz")
     end
 
-    it "warns when a key isn't a string" do
-      allow(application).to receive(:configuration) { { foo: "bar" } }
+    shared_examples 'correct warning with and without silence override' do
+      [
+        { FIGARO_SILENCE_STRING_WARNINGS: true },
+        { 'FIGARO_SILENCE_STRING_WARNINGS' => true },
+        { FIGARO_SILENCE_STRING_WARNINGS: 'true' },
+        { 'FIGARO_SILENCE_STRING_WARNINGS' => 'true' },
+        { FIGJAM_SILENCE_STRING_WARNINGS: true },
+        { 'FIGJAM_SILENCE_STRING_WARNINGS' => true },
+        { FIGJAM_SILENCE_STRING_WARNINGS: 'true' },
+        { 'FIGJAM_SILENCE_STRING_WARNINGS' => 'true' },
+      ].each do |override|
+        it "does not warn with override #{override.inspect}" do
+          allow(application).to receive(:configuration) { config.merge(override) }
 
-      expect(application).to receive(:warn)
+          expect(application).to_not receive(:warn)
 
-      application.load
+          application.load
+        end
+      end
+
+      [
+        [{ }, 1],
+        [{ 'FIGARO_SILENCE_STRING_WARNINGS' => false }, 2],
+        [{ FIGARO_SILENCE_STRING_WARNINGS: false }, 3],
+        [{ 'FIGARO_SILENCE_STRING_WARNINGS' => 'false' }, 1],
+        [{ FIGARO_SILENCE_STRING_WARNINGS: 'false' }, 2],
+        [{ 'FIGJAM_SILENCE_STRING_WARNINGS' => false }, 2],
+        [{ FIGJAM_SILENCE_STRING_WARNINGS: false }, 3],
+        [{ 'FIGJAM_SILENCE_STRING_WARNINGS' => 'false' }, 1],
+        [{ FIGJAM_SILENCE_STRING_WARNINGS: 'false' }, 2],
+      ].each do |override, expected_warning_count|
+        it "warns #{expected_warning_count} times with override #{override.inspect}" do
+          allow(application).to receive(:configuration) { config.merge(override) }
+
+          expect(application).to receive(:warn).exactly(expected_warning_count).times
+
+          application.load
+        end
+      end
     end
 
-    it "warns when a value isn't a string" do
-      allow(application).to receive(:configuration) { { "foo" => ["bar"] } }
+    context "warning when a key isn't a string" do
+      let(:config) { { SYMBOL_KEY: 'string value' } }
 
-      expect(application).to receive(:warn)
+      include_examples "correct warning with and without silence override"
+    end
 
-      application.load
+    context "warning when a value isn't a string" do
+      let(:config) { { 'string key' => :SYMBOL_VALUE } }
+
+      include_examples "correct warning with and without silence override"
     end
 
     it "allows nil values" do
