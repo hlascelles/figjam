@@ -243,7 +243,7 @@ GEM
     ruby_parser (3.19.1)
       sexp_processor (~> 4.16)
     sexp_processor (4.16.1)
-    sqlite3 (1.5.3-x86_64-linux)
+    sqlite3 (1.5.4-x86_64-linux)
     sys-uname (1.2.2)
       ffi (~> 1.1)
     thor (1.2.1)
