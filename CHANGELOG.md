@@ -1,4 +1,8 @@
-## 1.4.0 (2022-10-14)
+## Unreleased
+
+- Ensure that Figjam.adapter is set to Figjam::Rails::Application before the figjam Railtie is loaded [#7](https://github.com/hlascelles/figjam/pull/7)
+
+## 1.4.0 (2022-11-14)
 
 - Add rubocop, fasterer, reek and Appraisal [#1](https://github.com/hlascelles/figjam/pull/1)
 
