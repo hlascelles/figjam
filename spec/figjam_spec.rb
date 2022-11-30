@@ -60,6 +60,12 @@ describe Figjam do
     end
   end
 
+  describe "railtie configuration" do
+    it "loads railtie after the adapter is set to Figaro::Rails::Application" do
+      expect(ENV['ENGINE_VALUE']).to eq('diesel')
+    end
+  end
+
   describe ".require_keys" do
     before do
       ::ENV["foo"] = "bar"

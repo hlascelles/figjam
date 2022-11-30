@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "appraisal"
   spec.add_development_dependency "aruba"
   spec.add_development_dependency "bundler"
+  spec.add_development_dependency "combustion"
   spec.add_development_dependency "fasterer"
   spec.add_development_dependency "pry-byebug"
   spec.add_development_dependency "rake"

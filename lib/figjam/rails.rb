@@ -5,8 +5,8 @@ begin
 rescue LoadError
 else
   require "figjam/rails/application"
-  require "figjam/rails/railtie"
 
   Figjam.adapter = Figjam::Rails::Application
+  require "figjam/rails/railtie"
 end
 
