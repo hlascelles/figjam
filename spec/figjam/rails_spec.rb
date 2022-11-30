@@ -45,6 +45,10 @@ describe Figjam::Rails do
 development:
   adapter: sqlite3
   database: db/<%= ENV["foo"] %>.sqlite3
+
+test:
+  adapter: sqlite3
+  database: db/<%= ENV["foo"] %>.sqlite3
 EOF
 
       run_command_and_stop("rake db:migrate")
