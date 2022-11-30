@@ -1,6 +1,7 @@
 ## Unreleased
 
 - Ensure that Figjam.adapter is set to Figjam::Rails::Application before the figjam Railtie is loaded [#7](https://github.com/hlascelles/figjam/pull/7)
+- Allow silencing of non-string configuration warnings [#8](https://github.com/hlascelles/figjam/pull/8)
 
 ## 1.4.0 (2022-11-14)
 
