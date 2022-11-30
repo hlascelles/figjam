@@ -13,7 +13,9 @@ module Figjam
     include Enumerable
 
     def initialize(options = {})
-      @options = options.inject({}) { |m, (k, v)| m[k.to_sym] = v; m }
+      @options = options.each_with_object({}) { |(k, v), m|
+        m[k.to_sym] = v
+      }
     end
 
     def path
@@ -62,7 +64,7 @@ module Figjam
     end
 
     def parse(path)
-      File.exist?(path) && YAML.load(ERB.new(File.read(path)).result) || {}
+      (File.exist?(path) && YAML.load(ERB.new(File.read(path)).result)) || {}
     end
 
     def global_configuration
@@ -80,7 +82,7 @@ module Figjam
       end
 
       ::ENV[key.to_s] = value.nil? ? nil : value.to_s
-      ::ENV[FIGARO_ENV_PREFIX + key.to_s] = value.nil? ? nil: value.to_s
+      ::ENV[FIGARO_ENV_PREFIX + key.to_s] = value.nil? ? nil : value.to_s
     end
 
     def skip?(key)
@@ -90,7 +92,7 @@ module Figjam
     def non_string_warnings_silenced?
       SILENCE_STRING_WARNINGS_KEYS.any? { |key|
         # Allow the silence configuration itself to use non-string keys/values.
-        configuration.values_at(key.to_s, key).any? { |cv| cv.to_s == 'true' }
+        configuration.values_at(key.to_s, key).any? { |cv| cv.to_s == "true" }
       }
     end
 

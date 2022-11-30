@@ -15,7 +15,7 @@ module Figjam
         end
 
         it "raises an error when Rails.root isn't set yet" do
-          allow(::Rails).to receive(:root) { nil }
+          allow(::Rails).to receive(:root).and_return(nil)
 
           expect {
             application.send(:default_path)
@@ -27,10 +27,10 @@ module Figjam
         let!(:application) { Application.new }
 
         it "defaults to Rails.env" do
-          allow(::Rails).to receive(:env) { "development" }
+          allow(::Rails).to receive(:env).and_return("development")
 
           expect {
-            allow(::Rails).to receive(:env) { "test" }
+            allow(::Rails).to receive(:env).and_return("test")
           }.to change {
             application.send(:default_environment).to_s
           }.from("development").to("test")
