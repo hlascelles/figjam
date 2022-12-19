@@ -60,6 +60,12 @@ describe Figjam do
     end
   end
 
+  describe "#configuration" do
+    it "includes configuration using YAML aliases" do
+      expect(ENV['WHEEL_COUNT']).to eq('4')
+    end
+  end
+
   describe "railtie configuration" do
     it "loads railtie after the adapter is set to Figaro::Rails::Application" do
       expect(ENV['ENGINE_VALUE']).to eq('diesel')
