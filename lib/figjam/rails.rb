@@ -9,4 +9,3 @@ else
   Figjam.adapter = Figjam::Rails::Application
   require "figjam/rails/railtie"
 end
-

@@ -20,17 +20,17 @@ describe "figjam install" do
 
   context "with a .gitignore file" do
     before do
-      write_file(".gitignore", <<-EOF)
-/foo
-/bar
-EOF
+      write_file(".gitignore", <<~EOF)
+        /foo
+        /bar
+      EOF
     end
 
     it "Git-ignores the configuration file if applicable" do
       run_command_and_stop("figjam install")
 
-      expect(".gitignore").to have_file_content(%r(^/foo$))
-      expect(".gitignore").to have_file_content(%r(^/bar$))
+      expect(".gitignore").to have_file_content(%r{^/foo$})
+      expect(".gitignore").to have_file_content(%r{^/bar$})
     end
 
     it "respects path" do

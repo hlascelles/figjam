@@ -34,7 +34,7 @@ module Figjam
     end
 
     def missing_key!(key)
-      raise MissingKey.new(key)
+      raise MissingKey, key
     end
 
     def get_value(key)

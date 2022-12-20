@@ -62,7 +62,7 @@ describe Figjam do
 
   describe "railtie configuration" do
     it "loads railtie after the adapter is set to Figaro::Rails::Application" do
-      expect(ENV['ENGINE_VALUE']).to eq('diesel')
+      expect(ENV.fetch("ENGINE_VALUE", nil)).to eq("diesel")
     end
   end
 
@@ -81,7 +81,7 @@ describe Figjam do
 
       it "accepts an array" do
         expect {
-          Figjam.require_keys(["foo", "hello"])
+          Figjam.require_keys(%w[foo hello])
         }.not_to raise_error
       end
     end
@@ -99,7 +99,7 @@ describe Figjam do
 
       it "accepts an array" do
         expect {
-          Figjam.require_keys(["foo", "goodbye", "baz"])
+          Figjam.require_keys(%w[foo goodbye baz])
         }.to raise_error(Figjam::MissingKeys)
       end
     end
