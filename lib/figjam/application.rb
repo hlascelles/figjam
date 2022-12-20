@@ -62,7 +62,17 @@ module Figjam
     end
 
     def parse(path)
-      File.exist?(path) && YAML.load(ERB.new(File.read(path)).result) || {}
+      File.exist?(path) && load_yaml(ERB.new(File.read(path)).result) || {}
+    end
+
+    def load_yaml(source)
+      # https://bugs.ruby-lang.org/issues/17866
+      # https://github.com/rails/rails/commit/179d0a1f474ada02e0030ac3bd062fc653765dbe
+      begin
+        YAML.load(source, aliases: true) || {}
+      rescue ArgumentError
+        YAML.load(source) || {}
+      end
     end
 
     def global_configuration
