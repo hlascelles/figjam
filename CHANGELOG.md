@@ -1,3 +1,7 @@
+## 1.6.0 (2022-12-20)
+
+- Support Psych 4.X+ to correctly handle YAML aliases [#16](https://github.com/hlascelles/figjam/pull/16)
+
 ## 1.5.0 (2022-11-30)
 
 - Ensure that Figjam.adapter is set to Figjam::Rails::Application before the figjam Railtie is loaded [#7](https://github.com/hlascelles/figjam/pull/7)
