@@ -17,14 +17,14 @@ describe Figjam::Rails do
         --no-rc \
         --skip-bundle \
         --skip-webpack-install
-      CMD
+    CMD
 
     # Rails 7 doesn't expect the config.assets line, so comment it out or delete references to it
     development_file = "tmp/aruba/example/config/environments/development.rb"
     development_config = File.read(development_file)
     File.write(development_file, development_config.gsub(" config.assets", " # config.assets"))
     assets_initializer = "tmp/aruba/example/config/initializers/assets.rb"
-    File.delete(assets_initializer) if File.exist?(assets_initializer)
+    FileUtils.rm_f(assets_initializer)
 
     cd("example")
   end
@@ -41,15 +41,15 @@ describe Figjam::Rails do
     end
 
     it "happens before database initialization" do
-      write_file("config/database.yml", <<-EOF)
-development:
-  adapter: sqlite3
-  database: db/<%= ENV["foo"] %>.sqlite3
+      write_file("config/database.yml", <<~STR)
+        development:
+          adapter: sqlite3
+          database: db/<%= ENV["foo"] %>.sqlite3
 
-test:
-  adapter: sqlite3
-  database: db/<%= ENV["foo"] %>.sqlite3
-EOF
+        test:
+          adapter: sqlite3
+          database: db/<%= ENV["foo"] %>.sqlite3
+      STR
 
       run_command_and_stop("rake db:migrate")
 
@@ -57,9 +57,9 @@ EOF
     end
 
     it "happens before application configuration" do
-      insert_into_file_after("config/application.rb", /< Rails::Application$/, <<-EOL)
+      insert_into_file_after("config/application.rb", /< Rails::Application$/, <<-STR)
     config.foo = ENV["foo"]
-EOL
+      STR
 
       run_command_and_stop("rails runner 'puts Rails.application.config.foo'")
 

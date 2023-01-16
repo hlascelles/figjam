@@ -7,7 +7,7 @@ require "figjam/env"
 require "figjam/application"
 
 module Figjam
-  extend self
+  extend self # rubocop:disable Style/ModuleFunction
 
   attr_writer :adapter, :application
 
@@ -29,7 +29,7 @@ module Figjam
 
   def require_keys(*keys)
     missing_keys = keys.flatten - ::ENV.keys
-    raise MissingKeys.new(missing_keys) if missing_keys.any?
+    raise MissingKeys, missing_keys if missing_keys.any?
   end
 end
 

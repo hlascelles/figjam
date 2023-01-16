@@ -68,6 +68,8 @@ Style/SlicingWithRange:
   Enabled: true
 Style/NumericLiterals:
   Enabled: false
+Style/RedundantConstantBase:
+  Enabled: false # We refer to ::ENV in many places to distinguish it
 Style/TrailingCommaInArguments:
   Enabled: false
 Style/TrailingCommaInArrayLiteral:

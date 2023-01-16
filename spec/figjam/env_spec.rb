@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Figjam::ENV do
-  subject(:env) { Figjam::ENV }
+  subject(:env) { described_class }
 
   before do
     ::ENV["HELLO"] = "world"
@@ -9,7 +9,7 @@ describe Figjam::ENV do
   end
 
   describe "#method_missing" do
-    context "plain methods" do
+    context "with plain methods" do
       it "makes ENV values accessible as lowercase methods" do
         expect(env.hello).to eq("world")
         expect(env.foo).to eq("bar")
@@ -26,16 +26,16 @@ describe Figjam::ENV do
       end
 
       it "returns nil if no ENV key matches" do
-        expect(env.goodbye).to eq(nil)
+        expect(env.goodbye).to be_nil
       end
 
       it "respects a stubbed plain method" do
-        allow(env).to receive(:bar) { "baz" }
+        allow(env).to receive(:bar).and_return("baz") # rubocop:disable RSpec/SubjectStub
         expect(env.bar).to eq("baz")
       end
     end
 
-    context "bang methods" do
+    context "with bang methods" do
       it "makes ENV values accessible as lowercase methods" do
         expect(env.hello!).to eq("world")
         expect(env.foo!).to eq("bar")
@@ -56,38 +56,38 @@ describe Figjam::ENV do
       end
 
       it "respects a stubbed plain method" do
-        allow(env).to receive(:bar) { "baz" }
+        allow(env).to receive(:bar).and_return("baz") # rubocop:disable RSpec/SubjectStub
         expect { expect(env.bar!).to eq("baz") }.not_to raise_error
       end
     end
 
-    context "boolean methods" do
+    context "with boolean methods" do
       it "returns true for accessible, lowercase methods" do
-        expect(env.hello?).to eq(true)
-        expect(env.foo?).to eq(true)
+        expect(env.hello?).to be(true)
+        expect(env.foo?).to be(true)
       end
 
       it "returns true for accessible, uppercase methods" do
-        expect(env.HELLO?).to eq(true)
-        expect(env.FOO?).to eq(true)
+        expect(env.HELLO?).to be(true)
+        expect(env.FOO?).to be(true)
       end
 
       it "returns true for accessible, mixed-case methods" do
-        expect(env.Hello?).to eq(true)
-        expect(env.fOO?).to eq(true)
+        expect(env.Hello?).to be(true)
+        expect(env.fOO?).to be(true)
       end
 
       it "returns false if no ENV key matches" do
-        expect(env.goodbye?).to eq(false)
+        expect(env.goodbye?).to be(false)
       end
 
       it "respects a stubbed plain method" do
-        allow(env).to receive(:bar) { "baz" }
-        expect(env.bar?).to eq(true)
+        allow(env).to receive(:bar).and_return("baz") # rubocop:disable RSpec/SubjectStub
+        expect(env.bar?).to be(true)
       end
     end
 
-    context "setter methods" do
+    context "with setter methods" do
       it "raises an error for accessible, lowercase methods" do
         expect { env.hello = "world" }.to raise_error(NoMethodError)
         expect { env.foo = "bar" }.to raise_error(NoMethodError)
@@ -110,87 +110,87 @@ describe Figjam::ENV do
   end
 
   describe "#respond_to?" do
-    context "plain methods" do
+    context "with plain methods" do
       it "returns true for accessible, lowercase methods" do
-        expect(env.respond_to?(:hello)).to eq(true)
-        expect(env.respond_to?(:foo)).to eq(true)
+        expect(env.respond_to?(:hello)).to be(true)
+        expect(env.respond_to?(:foo)).to be(true)
       end
 
       it "returns true for accessible uppercase methods" do
-        expect(env.respond_to?(:HELLO)).to eq(true)
-        expect(env.respond_to?(:FOO)).to eq(true)
+        expect(env.respond_to?(:HELLO)).to be(true)
+        expect(env.respond_to?(:FOO)).to be(true)
       end
 
       it "returns true for accessible mixed-case methods" do
-        expect(env.respond_to?(:Hello)).to eq(true)
-        expect(env.respond_to?(:fOO)).to eq(true)
+        expect(env.respond_to?(:Hello)).to be(true)
+        expect(env.respond_to?(:fOO)).to be(true)
       end
 
       it "returns true if no ENV key matches" do
-        expect(env.respond_to?(:baz)).to eq(true)
+        expect(env.respond_to?(:baz)).to be(true)
       end
     end
 
-    context "bang methods" do
+    context "with bang methods" do
       it "returns true for accessible, lowercase methods" do
-        expect(env.respond_to?(:hello!)).to eq(true)
-        expect(env.respond_to?(:foo!)).to eq(true)
+        expect(env.respond_to?(:hello!)).to be(true)
+        expect(env.respond_to?(:foo!)).to be(true)
       end
 
       it "returns true for accessible uppercase methods" do
-        expect(env.respond_to?(:HELLO!)).to eq(true)
-        expect(env.respond_to?(:FOO!)).to eq(true)
+        expect(env.respond_to?(:HELLO!)).to be(true)
+        expect(env.respond_to?(:FOO!)).to be(true)
       end
 
       it "returns true for accessible mixed-case methods" do
-        expect(env.respond_to?(:Hello!)).to eq(true)
-        expect(env.respond_to?(:fOO!)).to eq(true)
+        expect(env.respond_to?(:Hello!)).to be(true)
+        expect(env.respond_to?(:fOO!)).to be(true)
       end
 
       it "returns false if no ENV key matches" do
-        expect(env.respond_to?(:baz!)).to eq(false)
+        expect(env.respond_to?(:baz!)).to be(false)
       end
     end
 
-    context "boolean methods" do
+    context "with boolean methods" do
       it "returns true for accessible, lowercase methods" do
-        expect(env.respond_to?(:hello?)).to eq(true)
-        expect(env.respond_to?(:foo?)).to eq(true)
+        expect(env.respond_to?(:hello?)).to be(true)
+        expect(env.respond_to?(:foo?)).to be(true)
       end
 
       it "returns true for accessible uppercase methods" do
-        expect(env.respond_to?(:HELLO?)).to eq(true)
-        expect(env.respond_to?(:FOO?)).to eq(true)
+        expect(env.respond_to?(:HELLO?)).to be(true)
+        expect(env.respond_to?(:FOO?)).to be(true)
       end
 
       it "returns true for accessible mixed-case methods" do
-        expect(env.respond_to?(:Hello?)).to eq(true)
-        expect(env.respond_to?(:fOO?)).to eq(true)
+        expect(env.respond_to?(:Hello?)).to be(true)
+        expect(env.respond_to?(:fOO?)).to be(true)
       end
 
       it "returns true if no ENV key matches" do
-        expect(env.respond_to?(:baz?)).to eq(true)
+        expect(env.respond_to?(:baz?)).to be(true)
       end
     end
 
-    context "setter methods" do
+    context "with setter methods" do
       it "returns false for accessible, lowercase methods" do
-        expect(env.respond_to?(:hello=)).to eq(false)
-        expect(env.respond_to?(:foo=)).to eq(false)
+        expect(env.respond_to?(:hello=)).to be(false)
+        expect(env.respond_to?(:foo=)).to be(false)
       end
 
       it "returns false for accessible uppercase methods" do
-        expect(env.respond_to?(:HELLO=)).to eq(false)
-        expect(env.respond_to?(:FOO=)).to eq(false)
+        expect(env.respond_to?(:HELLO=)).to be(false)
+        expect(env.respond_to?(:FOO=)).to be(false)
       end
 
       it "returns false for accessible mixed-case methods" do
-        expect(env.respond_to?(:Hello=)).to eq(false)
-        expect(env.respond_to?(:fOO=)).to eq(false)
+        expect(env.respond_to?(:Hello=)).to be(false)
+        expect(env.respond_to?(:fOO=)).to be(false)
       end
 
       it "returns false if no ENV key matches" do
-        expect(env.respond_to?(:baz=)).to eq(false)
+        expect(env.respond_to?(:baz=)).to be(false)
       end
     end
   end

@@ -10,7 +10,7 @@ jobs:
          os: [ubuntu]
          # We cannot add ruby 3.0 until Rails 5.2 is dropped.
          # https://github.com/rails/rails/issues/41074#issuecomment-759188945
-         ruby: [2.7] # , 3.0, 3.1
+         ruby: ["2.7"] # , 3.0, 3.1
     steps:
       - name: Check out code.
         uses: actions/checkout@v1
@@ -18,6 +18,6 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
       - run: bundle check || bundle install
-      - run: bundle exec appraisal install
+      - run: ./bundle_install_each_appraisal.sh
       - name: appraisal
         run: bundle exec appraisal rspec

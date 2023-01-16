@@ -8,9 +8,9 @@ module Figjam
     desc "install", "Install Figjam"
 
     method_option "path",
-      aliases: ["-p"],
-      default: "config/application.yml",
-      desc: "Specify a configuration file path"
+                  aliases: ["-p"],
+                  default: "config/application.yml",
+                  desc: "Specify a configuration file path"
 
     def install
       require "figjam/cli/install"

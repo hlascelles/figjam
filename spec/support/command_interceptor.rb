@@ -3,14 +3,14 @@ require "ostruct"
 require "yaml"
 
 module CommandInterceptor
-  class Command < OpenStruct
+  class Command < Struct
   end
 
-  BIN_PATH = File.expand_path("../bin", __FILE__)
-  LOG_PATH = File.expand_path("../../../tmp/commands.yml", __FILE__)
+  BIN_PATH = File.expand_path("bin", __dir__)
+  LOG_PATH = File.expand_path("../../tmp/commands.yml", __dir__)
 
   def self.setup
-    ENV["PATH"] = "#{BIN_PATH}:#{ENV["PATH"]}"
+    ENV["PATH"] = "#{BIN_PATH}:#{ENV.fetch('PATH', nil)}"
   end
 
   def self.intercept(name)
@@ -24,7 +24,7 @@ module CommandInterceptor
   end
 
   def self.commands
-    (File.exist?(LOG_PATH) && YAML.load_file(LOG_PATH) || []).map { |c| Command.new(c) }
+    ((File.exist?(LOG_PATH) && YAML.load_file(LOG_PATH)) || []).map { |c| Command.new(c) }
   end
 
   def self.reset
