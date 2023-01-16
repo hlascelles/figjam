@@ -1,3 +1,5 @@
+<img align="right" width="150" src="jamjar.png">
+
 figjam
 ================
 
@@ -213,3 +215,5 @@ It even aliases the `Figaro` to `Figjam` module namespace for drop-in compatibil
 
 Figjam is open source and contributions from the community are encouraged! No
 contribution is too small.
+
+Jam jar image from https://vectorportal.com/
