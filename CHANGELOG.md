@@ -1,3 +1,7 @@
+## Unreleased
+
+- Apply quality fixes [#9](https://github.com/hlascelles/figjam/pull/9)
+
 ## 1.6.0 (2022-12-20)
 
 - Support Psych 4.X+ to correctly handle YAML aliases [#16](https://github.com/hlascelles/figjam/pull/16)

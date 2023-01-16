@@ -1,3 +1,4 @@
+# rubocop:disable Style/GlobalVars
 RSpec.configure do |config|
   config.before(:suite) do
     $original_env_keys = ::ENV.keys
@@ -11,3 +12,4 @@ RSpec.configure do |config|
     ::ENV.keep_if { |k, _| $original_env_keys.include?(k) }
   end
 end
+# rubocop:enable Style/GlobalVars

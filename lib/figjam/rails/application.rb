@@ -4,7 +4,7 @@ module Figjam
       private
 
       def default_path
-        rails_not_initialized! unless ::Rails.root
+        rails_not_initialized unless ::Rails.root
 
         ::Rails.root.join("config", "application.yml")
       end
@@ -13,7 +13,7 @@ module Figjam
         ::Rails.env
       end
 
-      def rails_not_initialized!
+      def rails_not_initialized
         raise RailsNotInitialized
       end
     end

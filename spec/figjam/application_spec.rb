@@ -3,8 +3,10 @@ require "tempfile"
 
 describe Figjam::Application do
   before do
-    allow_any_instance_of(described_class).to receive(:default_path) { "/path/to/app/config/application.yml" }
-    allow_any_instance_of(described_class).to receive(:default_environment) { "development" }
+    allow_any_instance_of(described_class)
+      .to receive(:default_path).and_return("/path/to/app/config/application.yml")
+    allow_any_instance_of(described_class)
+      .to receive(:default_environment).and_return("development")
   end
 
   describe "#path" do
@@ -38,7 +40,7 @@ describe Figjam::Application do
       application = described_class.new
 
       expect {
-        allow(application).to receive(:default_path) { "/app/env.yml" }
+        allow(application).to receive(:default_path).and_return("/app/env.yml")
       }.to change {
         application.path
       }.from("/path/to/app/config/application.yml").to("/app/env.yml")
@@ -75,14 +77,14 @@ describe Figjam::Application do
     it "respects nil" do
       application = described_class.new(environment: nil)
 
-      expect(application.environment).to eq(nil)
+      expect(application.environment).to be_nil
     end
 
     it "follows a changing default" do
       application = described_class.new
 
       expect {
-        allow(application).to receive(:default_environment) { "test" }
+        allow(application).to receive(:default_environment).and_return("test")
       }.to change {
         application.environment
       }.from("development").to("test")
@@ -90,6 +92,7 @@ describe Figjam::Application do
   end
 
   describe "#configuration" do
+    # :reek:UtilityFunction
     def yaml_to_path(yaml)
       Tempfile.open("figjam") do |file|
         file.write(yaml)
@@ -98,30 +101,30 @@ describe Figjam::Application do
     end
 
     it "loads values from YAML" do
-      application = described_class.new(path: yaml_to_path(<<-YAML))
-foo: bar
+      application = described_class.new(path: yaml_to_path(<<~YAML))
+        foo: bar
       YAML
 
       expect(application.configuration).to eq("foo" => "bar")
     end
 
     it "merges environment-specific values" do
-      application = described_class.new(path: yaml_to_path(<<-YAML), environment: "test")
-foo: bar
-test:
-  foo: baz
+      application = described_class.new(path: yaml_to_path(<<~YAML), environment: "test")
+        foo: bar
+        test:
+          foo: baz
       YAML
 
       expect(application.configuration).to eq("foo" => "baz")
     end
 
     it "drops unused environment-specific values" do
-      application = described_class.new(path: yaml_to_path(<<-YAML), environment: "test")
-foo: bar
-test:
-  foo: baz
-production:
-  foo: bad
+      application = described_class.new(path: yaml_to_path(<<~YAML), environment: "test")
+        foo: bar
+        test:
+          foo: baz
+        production:
+          foo: bad
       YAML
 
       expect(application.configuration).to eq("foo" => "baz")
@@ -140,16 +143,16 @@ production:
     end
 
     it "is empty when the YAML file contains only comments" do
-      application = described_class.new(path: yaml_to_path(<<-YAML))
-# Comment
+      application = described_class.new(path: yaml_to_path(<<~YAML))
+        # Comment
       YAML
 
       expect(application.configuration).to eq({})
     end
 
     it "processes ERB" do
-      application = described_class.new(path: yaml_to_path(<<-YAML))
-foo: <%= "bar".upcase %>
+      application = described_class.new(path: yaml_to_path(<<~YAML))
+        foo: <%= "bar".upcase %>
       YAML
 
       expect(application.configuration).to eq("foo" => "BAR")
@@ -164,29 +167,29 @@ foo: <%= "bar".upcase %>
     end
 
     it "follows a changing default path" do
-      path_1 = yaml_to_path("foo: bar")
-      path_2 = yaml_to_path("foo: baz")
+      path1 = yaml_to_path("foo: bar")
+      path2 = yaml_to_path("foo: baz")
 
       application = described_class.new
-      allow(application).to receive(:default_path) { path_1 }
+      allow(application).to receive(:default_path) { path1 }
 
       expect {
-        allow(application).to receive(:default_path) { path_2 }
+        allow(application).to receive(:default_path) { path2 }
       }.to change {
         application.configuration
       }.from("foo" => "bar").to("foo" => "baz")
     end
 
     it "follows a changing default environment" do
-      application = described_class.new(path: yaml_to_path(<<-YAML))
-foo: bar
-test:
-  foo: baz
+      application = described_class.new(path: yaml_to_path(<<~YAML))
+        foo: bar
+        test:
+          foo: baz
       YAML
-      allow(application).to receive(:default_environment) { "development" }
+      allow(application).to receive(:default_environment).and_return("development")
 
       expect {
-        allow(application).to receive(:default_environment) { "test" }
+        allow(application).to receive(:default_environment).and_return("test")
       }.to change {
         application.configuration
       }.from("foo" => "bar").to("foo" => "baz")
@@ -197,7 +200,7 @@ test:
     let!(:application) { described_class.new }
 
     before do
-      allow(application).to receive(:configuration) { { "foo" => "bar" } }
+      allow(application).to receive(:configuration).and_return({ "foo" => "bar" })
     end
 
     it "merges values into ENV" do
@@ -215,15 +218,17 @@ test:
 
       expect {
         application.load
-      }.not_to change {
-        ::ENV["foo"]
-      }
+      }.not_to(
+        change {
+          ::ENV["foo"]
+        }
+      )
     end
 
     it "sets keys that have already been set internally" do
       application.load
 
-      allow(application).to receive(:configuration) { { "foo" => "baz" } }
+      allow(application).to receive(:configuration).and_return({ "foo" => "baz" })
 
       expect {
         application.load
@@ -232,36 +237,36 @@ test:
       }.from("bar").to("baz")
     end
 
-    shared_examples 'correct warning with and without silence override' do
+    shared_examples "correct warning with and without silence override" do
       [
         { FIGARO_SILENCE_STRING_WARNINGS: true },
-        { 'FIGARO_SILENCE_STRING_WARNINGS' => true },
-        { FIGARO_SILENCE_STRING_WARNINGS: 'true' },
-        { 'FIGARO_SILENCE_STRING_WARNINGS' => 'true' },
+        { "FIGARO_SILENCE_STRING_WARNINGS" => true },
+        { FIGARO_SILENCE_STRING_WARNINGS: "true" },
+        { "FIGARO_SILENCE_STRING_WARNINGS" => "true" },
         { FIGJAM_SILENCE_STRING_WARNINGS: true },
-        { 'FIGJAM_SILENCE_STRING_WARNINGS' => true },
-        { FIGJAM_SILENCE_STRING_WARNINGS: 'true' },
-        { 'FIGJAM_SILENCE_STRING_WARNINGS' => 'true' },
+        { "FIGJAM_SILENCE_STRING_WARNINGS" => true },
+        { FIGJAM_SILENCE_STRING_WARNINGS: "true" },
+        { "FIGJAM_SILENCE_STRING_WARNINGS" => "true" },
       ].each do |override|
         it "does not warn with override #{override.inspect}" do
           allow(application).to receive(:configuration) { config.merge(override) }
 
-          expect(application).to_not receive(:warn)
+          expect(application).not_to receive(:warn)
 
           application.load
         end
       end
 
       [
-        [{ }, 1],
-        [{ 'FIGARO_SILENCE_STRING_WARNINGS' => false }, 2],
+        [{}, 1],
+        [{ "FIGARO_SILENCE_STRING_WARNINGS" => false }, 2],
         [{ FIGARO_SILENCE_STRING_WARNINGS: false }, 3],
-        [{ 'FIGARO_SILENCE_STRING_WARNINGS' => 'false' }, 1],
-        [{ FIGARO_SILENCE_STRING_WARNINGS: 'false' }, 2],
-        [{ 'FIGJAM_SILENCE_STRING_WARNINGS' => false }, 2],
+        [{ "FIGARO_SILENCE_STRING_WARNINGS" => "false" }, 1],
+        [{ FIGARO_SILENCE_STRING_WARNINGS: "false" }, 2],
+        [{ "FIGJAM_SILENCE_STRING_WARNINGS" => false }, 2],
         [{ FIGJAM_SILENCE_STRING_WARNINGS: false }, 3],
-        [{ 'FIGJAM_SILENCE_STRING_WARNINGS' => 'false' }, 1],
-        [{ FIGJAM_SILENCE_STRING_WARNINGS: 'false' }, 2],
+        [{ "FIGJAM_SILENCE_STRING_WARNINGS" => "false" }, 1],
+        [{ FIGJAM_SILENCE_STRING_WARNINGS: "false" }, 2],
       ].each do |override, expected_warning_count|
         it "warns #{expected_warning_count} times with override #{override.inspect}" do
           allow(application).to receive(:configuration) { config.merge(override) }
@@ -273,26 +278,28 @@ test:
       end
     end
 
-    context "warning when a key isn't a string" do
-      let(:config) { { SYMBOL_KEY: 'string value' } }
+    context "when warning when a key isn't a string" do
+      let(:config) { { SYMBOL_KEY: "string value" } }
 
       include_examples "correct warning with and without silence override"
     end
 
-    context "warning when a value isn't a string" do
-      let(:config) { { 'string key' => :SYMBOL_VALUE } }
+    context "when warning when a value isn't a string" do
+      let(:config) { { "string key" => :SYMBOL_VALUE } }
 
       include_examples "correct warning with and without silence override"
     end
 
     it "allows nil values" do
-      allow(application).to receive(:configuration) { { "foo" => nil } }
+      allow(application).to receive(:configuration).and_return({ "foo" => nil })
 
       expect {
         application.load
-      }.not_to change {
-        ::ENV["foo"]
-      }
+      }.not_to(
+        change {
+          ::ENV["foo"]
+        }
+      )
     end
   end
 end

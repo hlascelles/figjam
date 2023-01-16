@@ -3,72 +3,68 @@ require "spec_helper"
 describe Figjam do
   describe ".env" do
     it "falls through to Figjam::ENV" do
-      expect(Figjam.env).to eq(Figjam::ENV)
+      expect(described_class.env).to eq(Figjam::ENV)
     end
   end
 
   describe ".adapter" do
-    let(:adapter) { double(:adapter) }
+    let(:adapter) { class_double(Figjam::Application) }
 
     it "defaults to the generic application adapter" do
-      expect(Figjam.adapter).to eq(Figjam::Application)
+      expect(described_class.adapter).to eq(Figjam::Application)
     end
 
     it "is configurable" do
       expect {
-        Figjam.adapter = adapter
-      }.to change {
-        Figjam.adapter
-      }.from(Figjam::Application).to(adapter)
+        described_class.adapter = adapter
+      }.to change(described_class, :adapter).from(Figjam::Application).to(adapter)
     end
   end
 
   describe ".application" do
-    let(:adapter) { double(:adapter) }
-    let(:application) { double(:application) }
-    let(:custom_application) { double(:custom_application) }
+    let(:adapter) { class_double(Figjam::Application) }
+    let(:application) { instance_double(Figjam::Application) }
+    let(:custom_application) { instance_double(Figjam::Application) }
 
     before do
-      allow(Figjam).to receive(:adapter) { adapter }
+      allow(described_class).to receive(:adapter) { adapter }
       allow(adapter).to receive(:new).with(no_args) { application }
     end
 
     it "defaults to a new adapter application" do
-      expect(Figjam.application).to eq(application)
+      expect(described_class.application).to eq(application)
     end
 
     it "is configurable" do
       expect {
-        Figjam.application = custom_application
-      }.to change {
-        Figjam.application
-      }.from(application).to(custom_application)
+        described_class.application = custom_application
+      }.to change(described_class, :application).from(application).to(custom_application)
     end
   end
 
   describe ".load" do
-    let(:application) { double(:application) }
+    let(:application) { instance_double(Figjam::Application) }
 
     before do
-      allow(Figjam).to receive(:application) { application }
+      allow(described_class).to receive(:application) { application }
     end
 
     it "loads the application configuration" do
       expect(application).to receive(:load).once.with(no_args)
 
-      Figjam.load
+      described_class.load
     end
   end
 
   describe "#configuration" do
     it "includes configuration using YAML aliases" do
-      expect(ENV['WHEEL_COUNT']).to eq('4')
+      expect(ENV.fetch("WHEEL_COUNT", nil)).to eq("4")
     end
   end
 
   describe "railtie configuration" do
     it "loads railtie after the adapter is set to Figaro::Rails::Application" do
-      expect(ENV['ENGINE_VALUE']).to eq('diesel')
+      expect(ENV.fetch("ENGINE_VALUE", nil)).to eq("diesel")
     end
   end
 
@@ -81,13 +77,13 @@ describe Figjam do
     context "when no keys are missing" do
       it "does nothing" do
         expect {
-          Figjam.require_keys("foo", "hello")
+          described_class.require_keys("foo", "hello")
         }.not_to raise_error
       end
 
       it "accepts an array" do
         expect {
-          Figjam.require_keys(["foo", "hello"])
+          described_class.require_keys(%w[foo hello])
         }.not_to raise_error
       end
     end
@@ -95,7 +91,7 @@ describe Figjam do
     context "when keys are missing" do
       it "raises an error for the missing keys" do
         expect {
-          Figjam.require_keys("foo", "goodbye", "baz")
+          described_class.require_keys("foo", "goodbye", "baz")
         }.to raise_error(Figjam::MissingKeys) { |error|
           expect(error.message).not_to include("foo")
           expect(error.message).to include("goodbye")
@@ -105,7 +101,7 @@ describe Figjam do
 
       it "accepts an array" do
         expect {
-          Figjam.require_keys(["foo", "goodbye", "baz"])
+          described_class.require_keys(%w[foo goodbye baz])
         }.to raise_error(Figjam::MissingKeys)
       end
     end

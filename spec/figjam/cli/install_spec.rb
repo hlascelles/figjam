@@ -1,5 +1,6 @@
 require "spec_helper"
 
+# rubocop:disable RSpec/DescribeClass
 describe "figjam install" do
   before do
     create_directory("example")
@@ -20,18 +21,20 @@ describe "figjam install" do
 
   context "with a .gitignore file" do
     before do
-      write_file(".gitignore", <<-EOF)
-/foo
-/bar
-EOF
+      write_file(".gitignore", <<~STR)
+        /foo
+        /bar
+      STR
     end
 
+    # rubocop:disable RSpec/ExpectActual
     it "Git-ignores the configuration file if applicable" do
       run_command_and_stop("figjam install")
 
-      expect(".gitignore").to have_file_content(%r(^/foo$))
-      expect(".gitignore").to have_file_content(%r(^/bar$))
+      expect(".gitignore").to have_file_content(%r{^/foo$})
+      expect(".gitignore").to have_file_content(%r{^/bar$})
     end
+    # rubocop:enable RSpec/ExpectActual
 
     it "respects path" do
       run_command_and_stop("figjam install -p env.yml")
@@ -46,3 +49,4 @@ EOF
     end
   end
 end
+# rubocop:enable RSpec/DescribeClass
