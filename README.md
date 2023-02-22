@@ -15,16 +15,35 @@ Figjam encourages you to commit default ENV values to a yaml file in your PRs. T
 loaded at runtime, but, crucially, can be overridden at any time by supplying a real ENV. This
 brings the ease of PR creation with the flexibility of runtime ENV changes.
 
+An example configuration file might look like this:
 
-### Usage
+```yaml
+GOOGLE_TAG_MANAGER_ID: GTM-12345
+PAYMENT_ENDPOINT: https://payments.localhost
 
-Add Figjam to your Gemfile and `bundle install`:
+prelive:
+  GOOGLE_TAG_MANAGER_ID: GTM-54321
+  PAYMENT_ENDPOINT: https://payments-prelive.example.com
+
+production:
+  GOOGLE_TAG_MANAGER_ID: GTM-34343
+  PAYMENT_ENDPOINT: https://payments.example.com
+```
+
+### Installation
+
+Figjam can be used with or without Rails. If using Bundler, add Figjam to your Gemfile and `bundle install`:
 
 ```ruby
 gem "figjam"
 ```
 
-Then:
+### Usage with Rails 
+
+Figjam will load itself automatically if you are using Rails. It will look for a
+`config/application.yml` file for ENV configuration.
+
+You can create a default configuration file by running:
 
 ```bash
 $ bundle exec figjam install
@@ -34,10 +53,39 @@ This creates a commented `config/application.yml` file which you can add default
 Add your own configuration to this file for all environments, and any specific environment
 overrides.
 
-### Example
+### Usage in Rails engines
 
-Given the following configuration file, the default value at the top will be used unless
-RAILS_ENV matches any of the subsequent keys (like `test`, `prelive`, `produciton`).
+Figjam is perfect for Rails engines. They can have their own configuration file, and
+they can be loaded independently or in addition of the main application. To do this,
+you can create a `config/application.yml` file in your engine, and add this initializer:
+
+```ruby
+Figjam::Application.new(
+  environment: ::Rails.env,
+  path: File.expand_path("../application.yml", __dir__)
+).load
+```
+
+### Usage without Rails
+
+If you are not using Rails, you can load Figjam in your gem. Note, you can
+do this as many times as you like. If you have multiple internal gems, they can
+all use `figjam` to load their own configuration independently.
+
+```ruby
+Figjam::Application.new(
+  environment: "some_environment_key",
+  path: "#{__dir__}/application.yml"
+).load
+```
+
+### How the loaded configuration is used 
+
+The configuration file is loaded by `figjam` into `ENV` at runtime. If any of the keys are already
+set in the process ENV, then the ENV value will take precedence.
+
+In terms of the file itself, the non-indented values at the top are the default values and will be
+used unless RAILS_ENV matches any of the subsequent keys (like `test`, `prelive`, `production`).
 
 ```yaml
 # config/application.yml
@@ -125,7 +173,7 @@ Figjam.env.something_else? # => false
 ```
 
 If you wish to use `ENV` in specs and want to temporarily change what it returns, you should
-definitely look at using the excellent [climate_control](https://github.com/thoughtbot/climate_control
+definitely look at using the excellent [climate_control](https://github.com/thoughtbot/climate_control)
 gem.
 
 ### Required Keys
@@ -167,8 +215,8 @@ Figjam and dotenv are similar:
 ### Differences
 
 * Configuration File
-  * Figjam expects a single file.
-  * Dotenv supports separate files for each environment.
+  * Figjam only needs a single file.
+  * Dotenv must use separate files for each environment.
 * Configuration File Format
   * Figjam expects YAML containing key/value pairs.
   * Dotenv convention is a collection of `KEY=VALUE` pairs.
@@ -196,7 +244,8 @@ If you're using Spring add `config/application.yml` to the watch list:
 
 ## Figjam origins
 
-Figjam started as a direct fork of the [figaro](https://github.com/laserlemon/figaro) rubygem.
+Figjam started as a direct fork of the [figaro](https://github.com/laserlemon/figaro) rubygem. Thanks
+to @laserlemon for the great work on that gem.
 
 There are some key differences in philosophy:
 
