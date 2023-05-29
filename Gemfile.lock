@@ -251,7 +251,7 @@ GEM
     sqlite3 (1.6.0-x86_64-linux)
     sys-uname (1.2.2)
       ffi (~> 1.1)
-    thor (1.2.1)
+    thor (1.2.2)
     timeout (0.3.2)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
