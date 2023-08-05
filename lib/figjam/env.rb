@@ -12,10 +12,8 @@ module Figjam
       end
     end
 
-    private
-
     # rubocop:disable Style/MissingRespondToMissing
-    def method_missing(method, *)
+    private def method_missing(method, *)
       key, punctuation = extract_key_from_method(method)
 
       case punctuation
@@ -27,21 +25,21 @@ module Figjam
     end
     # rubocop:enable Style/MissingRespondToMissing
 
-    def extract_key_from_method(method)
+    private def extract_key_from_method(method)
       method.to_s.downcase.match(/^(.+?)([!?=])?$/).captures
     end
 
     # rubocop:disable Naming/PredicateName
-    def has_key?(key)
+    private def has_key?(key)
       ::ENV.any? { |k, _| k.downcase == key }
     end
     # rubocop:enable Naming/PredicateName
 
-    def missing_key!(key)
+    private def missing_key!(key)
       raise MissingKey, key
     end
 
-    def get_value(key)
+    private def get_value(key)
       _, value = ::ENV.detect { |k, _| k.downcase == key }
       value
     end
