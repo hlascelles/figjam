@@ -6,7 +6,7 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v1
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@d01c52ad8bb5e96ea744946c5283be6a168feece # v1.540.0
         with:
           ruby-version: 3.0.0
       - run: bundle check || bundle install
@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: shellcheck
-        uses: reviewdog/action-shellcheck@v1
+        uses: reviewdog/action-shellcheck@f7921e489694b9d1fc5c3a843b414a95141fc380 # v1.19.0
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review # Change reporter.

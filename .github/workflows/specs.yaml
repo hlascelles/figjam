@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Check out code.
         uses: actions/checkout@v1
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@d01c52ad8bb5e96ea744946c5283be6a168feece # v1.540.0
         with:
           ruby-version: ${{ matrix.ruby }}
       - run: bundle check || bundle install
