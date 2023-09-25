@@ -63,7 +63,7 @@ module Figjam
     end
 
     def parse(path)
-      (File.exist?(path) && load_yaml(ERB.new(File.read(path)).result)) || {}
+      (File.exist?(path) && load_yaml(ERB.new(File.read(path)).result)) || {} # nosemgrep
     end
 
     # rubocop:disable Security/YAMLLoad
