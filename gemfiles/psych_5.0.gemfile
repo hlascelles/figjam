@@ -2,6 +2,9 @@
 
 source "https://rubygems.org"
 
+gem "net-imap", require: false
+gem "net-pop", require: false
+gem "net-smtp", require: false
 gem "rails", "~> 7.0"
 gem "psych", "~> 5.0"
 

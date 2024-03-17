@@ -35,6 +35,7 @@ describe Figjam::ENV do
       end
     end
 
+    # rubocop:disable RSpec/RepeatedSubjectCall
     context "with bang methods" do
       it "makes ENV values accessible as lowercase methods" do
         expect(env.hello!).to eq("world")
@@ -107,6 +108,7 @@ describe Figjam::ENV do
         expect { env.goodbye = "world" }.to raise_error(NoMethodError)
       end
     end
+    # rubocop:enable RSpec/RepeatedSubjectCall
   end
 
   describe "#respond_to?" do

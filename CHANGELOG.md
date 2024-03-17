@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Remove ruby 2.7 and Rails 5 tests, add ruby 3.x tests and upgrade rubocop to 1.42.0 [#100](https://github.com/hlascelles/figjam/pull/100)
 - Apply quality fixes [#9](https://github.com/hlascelles/figjam/pull/9)
 
 ## 1.6.0 (2022-12-20)

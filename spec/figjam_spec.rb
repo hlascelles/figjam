@@ -3,28 +3,28 @@ require "spec_helper"
 describe Figjam do
   describe ".env" do
     it "falls through to Figjam::ENV" do
-      expect(described_class.env).to eq(Figjam::ENV)
+      expect(described_class.env).to eq(described_class::ENV)
     end
   end
 
   describe ".adapter" do
-    let(:adapter) { class_double(Figjam::Application) }
+    let(:adapter) { class_double(described_class::Application) }
 
     it "defaults to the generic application adapter" do
-      expect(described_class.adapter).to eq(Figjam::Application)
+      expect(described_class.adapter).to eq(described_class::Application)
     end
 
     it "is configurable" do
       expect {
         described_class.adapter = adapter
-      }.to change(described_class, :adapter).from(Figjam::Application).to(adapter)
+      }.to change(described_class, :adapter).from(described_class::Application).to(adapter)
     end
   end
 
   describe ".application" do
-    let(:adapter) { class_double(Figjam::Application) }
-    let(:application) { instance_double(Figjam::Application) }
-    let(:custom_application) { instance_double(Figjam::Application) }
+    let(:adapter) { class_double(described_class::Application) }
+    let(:application) { instance_double(described_class::Application) }
+    let(:custom_application) { instance_double(described_class::Application) }
 
     before do
       allow(described_class).to receive(:adapter) { adapter }
@@ -43,7 +43,7 @@ describe Figjam do
   end
 
   describe ".load" do
-    let(:application) { instance_double(Figjam::Application) }
+    let(:application) { instance_double(described_class::Application) }
 
     before do
       allow(described_class).to receive(:application) { application }
@@ -92,7 +92,7 @@ describe Figjam do
       it "raises an error for the missing keys" do
         expect {
           described_class.require_keys("foo", "goodbye", "baz")
-        }.to raise_error(Figjam::MissingKeys) { |error|
+        }.to raise_error(described_class::MissingKeys) { |error|
           expect(error.message).not_to include("foo")
           expect(error.message).to include("goodbye")
           expect(error.message).to include("baz")
@@ -102,7 +102,7 @@ describe Figjam do
       it "accepts an array" do
         expect {
           described_class.require_keys(%w[foo goodbye baz])
-        }.to raise_error(Figjam::MissingKeys)
+        }.to raise_error(described_class::MissingKeys)
       end
     end
   end
