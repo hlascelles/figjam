@@ -5,6 +5,7 @@ describe Figjam::Rails do
     run_command_and_stop(<<-CMD)
       rails new example \
         --skip-gemfile \
+        --skip-activerecord \
         --skip-git \
         --skip-keeps \
         --skip-sprockets \
@@ -25,6 +26,18 @@ describe Figjam::Rails do
     File.write(development_file, development_config.gsub(" config.assets", " # config.assets"))
     assets_initializer = "tmp/aruba/example/config/initializers/assets.rb"
     FileUtils.rm_f(assets_initializer)
+
+    # Cater for some versions of psych not supporting yaml anchors unless the `aliases: true`
+    # option is set. This is an internal call in Rails so we cannot fix it there. We should review
+    # this when on later versions of ruby and Rails.
+    database_file = "tmp/aruba/example/config/database.yml"
+    File.write(database_file, <<-STR)
+      development:
+        adapter: sqlite3
+        pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+        timeout: 5000
+        database: db/test.sqlite3
+    STR
 
     cd("example")
   end

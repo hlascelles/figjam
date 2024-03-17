@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     "bug_tracker_uri" => "https://github.com/hlascelles/figjam/issues",
     "rubygems_mfa_required" => "true",
   }
-  spec.required_ruby_version = ">= 2.7"
+  spec.required_ruby_version = ">= 3.0"
 
   spec.add_dependency "thor", ">= 0.14.0", "< 2"
 

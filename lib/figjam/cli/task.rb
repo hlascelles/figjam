@@ -13,17 +13,15 @@ module Figjam
         @options = options
       end
 
-      private
-
-      def env
+      private def env
         ENV.to_hash.update(configuration)
       end
 
-      def configuration
+      private def configuration
         application.configuration
       end
 
-      def application
+      private def application
         @application ||= Figjam::Application.new(options)
       end
 

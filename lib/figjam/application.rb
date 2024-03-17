@@ -48,26 +48,24 @@ module Figjam
       configuration.each(&block)
     end
 
-    private
-
-    def default_path
+    private def default_path
       raise NotImplementedError
     end
 
-    def default_environment
+    private def default_environment
       nil
     end
 
-    def raw_configuration
+    private def raw_configuration
       (@parsed ||= Hash.new { |hash, path| hash[path] = parse(path) })[path]
     end
 
-    def parse(path)
+    private def parse(path)
       (File.exist?(path) && load_yaml(ERB.new(File.read(path)).result)) || {} # nosemgrep
     end
 
     # rubocop:disable Security/YAMLLoad
-    def load_yaml(source)
+    private def load_yaml(source)
       # https://bugs.ruby-lang.org/issues/17866
       # https://github.com/rails/rails/commit/179d0a1f474ada02e0030ac3bd062fc653765dbe
       YAML.load(source, aliases: true) || {}
@@ -76,15 +74,15 @@ module Figjam
     end
     # rubocop:enable Security/YAMLLoad
 
-    def global_configuration
+    private def global_configuration
       raw_configuration.reject { |_, value| value.is_a?(Hash) }
     end
 
-    def environment_configuration
+    private def environment_configuration
       raw_configuration[environment] || {}
     end
 
-    def set(key, value)
+    private def set(key, value)
       unless non_string_warnings_silenced?
         non_string_configuration(key) unless key.is_a?(String)
         non_string_configuration(value) unless value.is_a?(String) || value.nil?
@@ -94,22 +92,22 @@ module Figjam
       ::ENV[FIGARO_ENV_PREFIX + key.to_s] = value.nil? ? nil : value.to_s
     end
 
-    def skip?(key)
+    private def skip?(key)
       ::ENV.key?(key.to_s) && !::ENV.key?(FIGARO_ENV_PREFIX + key.to_s)
     end
 
-    def non_string_warnings_silenced?
+    private def non_string_warnings_silenced?
       SILENCE_STRING_WARNINGS_KEYS.any? { |key|
         # Allow the silence configuration itself to use non-string keys/values.
         configuration.values_at(key.to_s, key).any? { |cv| cv.to_s == "true" }
       }
     end
 
-    def non_string_configuration(value)
+    private def non_string_configuration(value)
       warn "WARNING: Use strings for Figjam configuration. #{value.inspect} was converted to #{value.to_s.inspect}." # rubocop:disable Layout/LineLength
     end
 
-    def key_skipped(key)
+    private def key_skipped(key)
       warn "WARNING: Skipping key #{key.inspect}. Already set in ENV."
     end
   end
