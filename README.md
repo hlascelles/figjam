@@ -3,7 +3,10 @@
 figjam
 ================
 
-[![Gem Version](https://img.shields.io/gem/v/figjam?color=green)](https://img.shields.io/gem/v/figjam?color=green)
+[![Gem Version](https://img.shields.io/gem/v/figjam?color=green)](https://rubygems.org/gems/figjam)
+[![specs workflow](https://github.com/hlascelles/figjam/actions/workflows/specs.yml/badge.svg)](https://github.com/hlascelles/figjam/actions)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+
 
 Figjam makes it easy to configure ruby and Rails apps `ENV` values by just using a single YAML file.
 
