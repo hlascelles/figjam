@@ -1,21 +1,23 @@
 name: Specs
-on: [pull_request]
+on:
+- pull_request
 jobs:
   appraisal:
     name: appraisal
     runs-on: ubuntu-latest
     strategy:
-       fail-fast: false
-       matrix:
-         os: [ubuntu]
-         ruby: ["3.0", "3.1", "3.2", "3.3"]
+      fail-fast: false
+      matrix:
+        os: [ ubuntu ]
+        ruby: [ "3.0", "3.1", "3.2", "3.3" ]
     steps:
-      - name: Check out code.
-        uses: actions/checkout@v4
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: ${{ matrix.ruby }}
-      - run: bundle check || bundle install
-      - run: ./bundle_install_each_appraisal.sh
-      - name: appraisal
-        run: bundle exec appraisal rspec
+    - name: Check out code.
+      uses: actions/checkout@v4
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+    - run: bundle check || bundle install
+    - run: ./bundle_install_each_appraisal.sh
+    - name: appraisal
+      run: bundle exec appraisal rspec
