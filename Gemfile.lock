@@ -188,7 +188,7 @@ GEM
     minitest (5.23.1)
     multi_test (1.1.0)
     mutex_m (0.2.0)
-    net-imap (0.4.13)
+    net-imap (0.4.14)
       date
       net-protocol
     net-pop (0.1.2)
