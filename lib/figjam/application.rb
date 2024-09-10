@@ -108,7 +108,7 @@ module Figjam
     end
 
     private def key_skipped(key)
-      warn "WARNING: Skipping key #{key.inspect}. Already set in ENV."
+      puts "INFO: Skipping key #{key.inspect}. Already set in ENV."
     end
   end
 end
