@@ -1,3 +1,7 @@
+## 1.6.2 (2024-09-10)
+
+- Reduce override log level to info [#160](https://github.com/hlascelles/figjam/pull/160)
+
 ## 1.6.1 (2024-04-28)
 
 - Add ruby 3.3 tests [#117](https://github.com/hlascelles/figjam/pull/117)

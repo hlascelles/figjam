@@ -214,7 +214,8 @@ describe Figjam::Application do
     it "skips keys (and warns) that have already been set externally" do
       ::ENV["foo"] = "baz"
 
-      expect(application).to receive(:warn)
+      expect(application)
+        .to receive(:puts).with('INFO: Skipping key "foo". Already set in ENV.')
 
       expect {
         application.load
