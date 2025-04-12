@@ -200,28 +200,29 @@ describe Figjam::Application do
     let!(:application) { described_class.new }
 
     before do
-      allow(application).to receive(:configuration).and_return({ "foo" => "bar" })
+      # Update to use uppercase keys in the default configuration
+      allow(application).to receive(:configuration).and_return({ "FOO" => "bar" })
     end
 
     it "merges values into ENV" do
       expect {
         application.load
       }.to change {
-        ::ENV["foo"]
+        ::ENV["FOO"]
       }.from(nil).to("bar")
     end
 
     it "skips keys (and warns) that have already been set externally" do
-      ::ENV["foo"] = "baz"
+      ::ENV["FOO"] = "baz"
 
       expect(application)
-        .to receive(:puts).with('INFO: Skipping key "foo". Already set in ENV.')
+        .to receive(:puts).with('INFO: Skipping key "FOO". Already set in ENV.')
 
       expect {
         application.load
       }.not_to(
         change {
-          ::ENV["foo"]
+          ::ENV["FOO"]
         }
       )
     end
@@ -229,13 +230,34 @@ describe Figjam::Application do
     it "sets keys that have already been set internally" do
       application.load
 
-      allow(application).to receive(:configuration).and_return({ "foo" => "baz" })
+      allow(application).to receive(:configuration).and_return({ "FOO" => "baz" })
 
       expect {
         application.load
       }.to change {
-        ::ENV["foo"]
+        ::ENV["FOO"]
       }.from("bar").to("baz")
+    end
+
+    it "raises an error for keys that are not all uppercase" do
+      allow(application).to receive(:configuration).and_return({ "foo" => "bar",
+                                                                 "FOO_BAR" => "baz" })
+
+      expect {
+        application.load
+      }.to raise_error(Figjam::InvalidKeyNameError,
+                       'Environment variable names must be uppercase: "foo"')
+    end
+
+    it "accepts keys that are all uppercase" do
+      allow(application).to receive(:configuration).and_return({ "FOO" => "bar",
+                                                                 "BAR_BAZ" => "qux" })
+
+      expect {
+        application.load
+      }.to change {
+        [::ENV["FOO"], ::ENV["BAR_BAZ"]]
+      }.from([nil, nil]).to(%w[bar qux])
     end
 
     shared_examples "correct warning with and without silence override" do
@@ -286,19 +308,19 @@ describe Figjam::Application do
     end
 
     context "when warning when a value isn't a string" do
-      let(:config) { { "string key" => :SYMBOL_VALUE } }
+      let(:config) { { "STRING_KEY" => :SYMBOL_VALUE } }
 
       include_examples "correct warning with and without silence override"
     end
 
     it "allows nil values" do
-      allow(application).to receive(:configuration).and_return({ "foo" => nil })
+      allow(application).to receive(:configuration).and_return({ "FOO" => nil })
 
       expect {
         application.load
       }.not_to(
         change {
-          ::ENV["foo"]
+          ::ENV["FOO"]
         }
       )
     end

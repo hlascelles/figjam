@@ -44,11 +44,11 @@ describe Figjam::Rails do
 
   describe "initialization" do
     before do
-      write_file("config/application.yml", "foo: bar")
+      write_file("config/application.yml", "FOO: bar")
     end
 
     it "loads application.yml" do
-      run_command_and_stop("rails runner 'puts Figjam.env.foo'")
+      run_command_and_stop("rails runner 'puts Figjam.env.FOO'")
 
       expect(all_stdout).to include("bar")
     end
@@ -57,11 +57,11 @@ describe Figjam::Rails do
       write_file("config/database.yml", <<~STR)
         development:
           adapter: sqlite3
-          database: db/<%= ENV["foo"] %>.sqlite3
+          database: db/<%= ENV["FOO"] %>.sqlite3
 
         test:
           adapter: sqlite3
-          database: db/<%= ENV["foo"] %>.sqlite3
+          database: db/<%= ENV["FOO"] %>.sqlite3
       STR
 
       run_command_and_stop("rake db:migrate")
@@ -71,10 +71,10 @@ describe Figjam::Rails do
 
     it "happens before application configuration" do
       insert_into_file_after("config/application.rb", /< Rails::Application$/, <<-STR)
-    config.foo = ENV["foo"]
+    config.FOO = ENV["FOO"]
       STR
 
-      run_command_and_stop("rails runner 'puts Rails.application.config.foo'")
+      run_command_and_stop("rails runner 'puts Rails.application.config.FOO'")
 
       expect(all_stdout).to include("bar")
     end
