@@ -3,6 +3,8 @@ require "yaml"
 require "figjam/figaro_alias"
 
 module Figjam
+  class InvalidKeyNameError < StandardError; end
+
   # :reek:TooManyMethods
   class Application
     FIGARO_ENV_PREFIX = "_FIGARO_".freeze
@@ -40,7 +42,13 @@ module Figjam
 
     def load
       each do |key, value|
-        skip?(key) ? key_skipped(key) : set(key, value)
+        if !valid_key_name?(key)
+          invalid_key_name(key)
+        elsif skip?(key)
+          key_skipped(key)
+        else
+          set(key, value)
+        end
       end
     end
 
@@ -109,6 +117,14 @@ module Figjam
 
     private def key_skipped(key)
       puts "INFO: Skipping key #{key.inspect}. Already set in ENV."
+    end
+
+    private def valid_key_name?(key)
+      key.to_s == key.to_s.upcase
+    end
+
+    private def invalid_key_name(key)
+      raise InvalidKeyNameError, "Environment variable names must be uppercase: #{key.inspect}"
     end
   end
 end

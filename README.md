@@ -7,7 +7,6 @@ figjam
 [![specs workflow](https://github.com/hlascelles/figjam/actions/workflows/specs.yml/badge.svg)](https://github.com/hlascelles/figjam/actions)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-
 Figjam makes it easy to configure ruby and Rails apps `ENV` values by just using a single YAML file.
 
 PRs to applications often need to come with default configuration values, but hardcoding these into

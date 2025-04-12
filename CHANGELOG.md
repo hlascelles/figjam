@@ -1,3 +1,8 @@
+## 2.0.0 (2025-04-12)
+
+BREAKING CHANGE:
+- Enforce uppercase ENV keys [#184](https://github.com/hlascelles/figjam/pull/184)
+
 ## 1.6.2 (2024-09-10)
 
 - Reduce override log level to info [#160](https://github.com/hlascelles/figjam/pull/160)
