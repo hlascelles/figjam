@@ -20,15 +20,19 @@ Gem::Specification.new do |spec|
     "bug_tracker_uri" => "https://github.com/hlascelles/figjam/issues",
     "rubygems_mfa_required" => "true",
   }
-  spec.required_ruby_version = ">= 3.0"
+  spec.required_ruby_version = ">= 3.1"
 
   spec.add_dependency "thor", ">= 0.14.0", "< 2"
 
   spec.add_development_dependency "appraisal"
   spec.add_development_dependency "aruba"
+  # Ruby 3.4 needs this gem for specs, otherwise we see "cannot load such file -- base64"
+  spec.add_development_dependency "base64"
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "combustion"
   spec.add_development_dependency "fasterer"
+  # Ruby 3.4 needs this gem for specs, otherwise we see "cannot load such file -- mutex_m"
+  spec.add_development_dependency "mutex_m"
   spec.add_development_dependency "pry-byebug"
   spec.add_development_dependency "rails"
   spec.add_development_dependency "rake"
