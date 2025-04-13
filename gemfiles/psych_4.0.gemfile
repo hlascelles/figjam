@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gem "net-imap", require: false
 gem "net-pop", require: false
 gem "net-smtp", require: false
+gem "sqlite3", "~> 1.0"
 gem "rails", "~> 7.0"
 gem "psych", "~> 4.0"
 

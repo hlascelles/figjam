@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    figjam (1.6.2)
+    figjam (2.0.0)
       thor (>= 0.14.0, < 2)
 
 GEM
@@ -185,6 +185,7 @@ GEM
     marcel (1.0.4)
     method_source (1.0.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.8)
     minitest (5.22.3)
     multi_test (1.1.0)
     mutex_m (0.2.0)
@@ -198,7 +199,8 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     nio4r (2.7.0)
-    nokogiri (1.16.3-x86_64-linux)
+    nokogiri (1.18.7)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     parallel (1.24.0)
     parser (3.3.0.5)
@@ -326,10 +328,12 @@ PLATFORMS
 DEPENDENCIES
   appraisal
   aruba
+  base64
   bundler
   combustion
   fasterer
   figjam!
+  mutex_m
   net-imap
   net-pop
   net-smtp
@@ -341,7 +345,7 @@ DEPENDENCIES
   rubocop
   rubocop-performance
   rubocop-rspec
-  sqlite3
+  sqlite3 (~> 1.0)
 
 BUNDLED WITH
    2.4.3
