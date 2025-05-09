@@ -3,7 +3,7 @@ require "spec_helper"
 describe Figjam::Rails do
   before do
     run_command_and_stop(<<-CMD)
-      rails _7.1.0_ new example \
+      rails _8.0.2_ new example \
         --skip-gemfile \
         --skip-activerecord \
         --skip-git \
