@@ -1,16 +1,15 @@
 ---
 detectors:
   Attribute:
-    enabled: false
-    exclude: []
+    enabled: true
   BooleanParameter:
     enabled: false
     exclude: []
   ClassVariable:
-    enabled: false # Rubocop already handles this
+    enabled: true
     exclude: []
   ControlParameter:
-    enabled: false
+    enabled: true
     exclude: []
   DataClump:
     enabled: true
@@ -22,18 +21,17 @@ detectors:
     max_calls: 3
     allow_calls: []
     exclude:
-    - spec # Specs contain a lot of duplication (better way?)
-    - expect # Specs contain a lot of duplication (better way?)
-    - logger # Calling logger often is a good thing
+    - spec # Specs contain a lot of duplication
+    - expect # Specs contain a lot of duplication
   FeatureEnvy:
     enabled: false
   IrresponsibleModule:
-    enabled: false # We don't need Ruby comments for all modules
+    enabled: false
     exclude: []
   LongParameterList:
     enabled: true
     exclude: []
-    max_params: 4 # 4 is used across our codebase
+    max_params: 4
     overrides:
       initialize:
         max_params: 5
@@ -54,7 +52,7 @@ detectors:
     ignore_iterators:
     - tap
   NilCheck:
-    enabled: false # Didn't appear helpful
+    enabled: false
     exclude: []
   RepeatedConditional:
     enabled: true
@@ -112,35 +110,8 @@ detectors:
     enabled: true
     public_methods_only: true
     exclude:
-    - Concern # Concerns will frequently appear to have utility functions
-    - Helper # Lots of helper methods do things like hash manipulation
-    - "#change"
-    - "#up"
-    - "#down"
-    - "#run"
-    - "#work_message"
+    - job_args_from_db_row
 
-directories:
-  "**/spec/**":
-    UtilityFunction:
-      enabled: false
-    DuplicateMethodCall:
-      enabled: false
-  "**/jobs/**":
-    UtilityFunction:
-      enabled: false
-  "**/workers/**":
-    UtilityFunction:
-      enabled: false
-  "**/app/controllers/**":
-    InstanceVariableAssumption:
-      enabled: false
-  "**/app/listeners/**":
-    UtilityFunction:
-      enabled: false
-    DataClump:
-      enabled: false
-  "**/db/migrate/**":
-    # Migrations contain generated class names so this reek makes no sense there
-    UncommunicativeModuleName:
-      enabled: false
+exclude_paths:
+- vendor
+- gemfiles

@@ -1,0 +1,2 @@
+Style/RedundantConstantBase:
+  Enabled: false # We refer to ::ENV in many places to distinguish it

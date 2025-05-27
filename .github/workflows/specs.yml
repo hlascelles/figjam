@@ -1,9 +1,11 @@
 name: Specs
+permissions:
+  contents: read
 on:
 - pull_request
 jobs:
   specs:
-    name: appraisal
+    name: specs
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -15,7 +17,5 @@ jobs:
     - uses: ruby/setup-ruby@354a1ad156761f5ee2b7b13fa8e09943a5e8d252 # v1.229.0
       with:
         ruby-version: ${{ matrix.ruby }}
-    - run: bundle check || bundle install
-    - run: ./bundle_install_each_appraisal.sh
-    - name: appraisal
-      run: bundle exec appraisal rspec
+    - run: ./specs.sh
+    - run: ./quality.sh

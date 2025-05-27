@@ -1,4 +1,4 @@
-if ::Gem::Version.new(RUBY_VERSION) <= ::Gem::Version.new('3.3')
+if ::Gem::Version.new(RUBY_VERSION) <= ::Gem::Version.new("3.3")
   appraise "rails-6" do
     gem "psych", "~> 4.0"
     gem "sqlite3", "~> 1.0"
