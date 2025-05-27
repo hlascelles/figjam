@@ -52,8 +52,8 @@ module Figjam
       end
     end
 
-    def each(&block)
-      configuration.each(&block)
+    def each(&)
+      configuration.each(&)
     end
 
     private def default_path

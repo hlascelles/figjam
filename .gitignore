@@ -1,4 +1,3 @@
-.idea
 *.gem
 *.rbc
 /.config
@@ -41,6 +40,7 @@ build-iPhoneSimulator/
 
 ## Environment normalization:
 /.bundle/
+/coverage/
 /vendor/bundle
 /lib/bundler/man/
 
@@ -55,5 +55,19 @@ build-iPhoneSimulator/
 
 # Used by RuboCop. Remote config files pulled in from inherit_from directive.
 # .rubocop-https?--*
+/.idea/.gitignore
+/.idea/ferrum-har.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/vcs.xml
+/target/
+.idea
+.ruby-version
 /spec/internal/log/
 /.rspec_status
+/pkg
+_site
+.sass-cache
+.jekyll-metadata
+/log
+.rspec_status

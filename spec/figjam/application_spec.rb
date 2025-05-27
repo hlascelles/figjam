@@ -304,13 +304,13 @@ describe Figjam::Application do
     context "when warning when a key isn't a string" do
       let(:config) { { SYMBOL_KEY: "string value" } }
 
-      include_examples "correct warning with and without silence override"
+      it_behaves_like "correct warning with and without silence override"
     end
 
     context "when warning when a value isn't a string" do
       let(:config) { { "STRING_KEY" => :SYMBOL_VALUE } }
 
-      include_examples "correct warning with and without silence override"
+      it_behaves_like "correct warning with and without silence override"
     end
 
     it "allows nil values" do

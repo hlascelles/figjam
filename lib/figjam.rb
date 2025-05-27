@@ -6,6 +6,7 @@ require "figjam/error"
 require "figjam/env"
 require "figjam/application"
 
+# :reek:Attribute
 module Figjam
   extend self # rubocop:disable Style/ModuleFunction
 
