@@ -48,10 +48,16 @@ Lint/StructNewOverride:
   Enabled: true
 Metrics/MethodLength:
   Max: 30
+Rails/Blank:
+  Enabled: false # Gems aren't Rails
 Rails/Delegate:
+  Enabled: false # Gems aren't Rails
+Rails/Present:
   Enabled: false # Gems aren't Rails
 Rails/Output:
   Enabled: false # Gems aren't Rails
+Rails/SquishedSQLHeredocs:
+  Enabled: false
 RSpec/AnyInstance:
   Enabled: false
 RSpec/ExampleLength:
@@ -63,6 +69,8 @@ RSpec/MessageSpies:
 RSpec/MultipleExpectations:
   Max: 5
 RSpec/NoExpectationExample:
+  Enabled: false
+RSpec/ExpectInHook:
   Enabled: false
 RSpec/StubbedMock:
   Enabled: false
