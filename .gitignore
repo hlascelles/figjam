@@ -71,3 +71,7 @@ _site
 .jekyll-metadata
 /log
 .rspec_status
+.byebug_history
+**/.byebug_history
+.bundle
+**/.bundle
