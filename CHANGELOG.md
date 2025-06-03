@@ -1,3 +1,7 @@
+## 1.6.2 (2024-09-10)
+
+- Adding trusted publishing [#216](https://github.com/hlascelles/figjam/pull/216)
+ 
 ## 2.0.0 (2025-04-12)
 
 BREAKING CHANGE:

@@ -9,4 +9,19 @@ gem "sqlite3", "~> 1.0"
 gem "rails", "~> 7.0"
 gem "psych", "~> 4.0"
 
+group :development, :test do
+  gem "fasterer"
+  gem "pry-byebug"
+  gem "rake"
+  gem "reek"
+  gem "rspec"
+  gem "rubocop"
+  gem "rubocop-magic_numbers"
+  gem "rubocop-performance"
+  gem "rubocop-rails"
+  gem "rubocop-rake", "> 0.7.0"
+  gem "rubocop-rspec", "> 3.5.0"
+  gem "rubocop-thread_safety"
+end
+
 gemspec path: "../"
