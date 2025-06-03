@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    figjam (2.0.0)
+    figjam (2.0.1)
       thor (>= 0.14.0, < 2)
 
 GEM
