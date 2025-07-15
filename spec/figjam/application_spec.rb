@@ -131,9 +131,10 @@ describe Figjam::Application do
     end
 
     it "is empty when no YAML file is present" do
-      application = described_class.new(path: "/path/to/nowhere")
-
-      expect(application.configuration).to eq({})
+      path = "/path/to/nowhere"
+      application = described_class.new(path:)
+      expect { application.configuration }
+        .to raise_error(ArgumentError, "Figjam config path #{path} not found")
     end
 
     it "is empty when the YAML file is blank" do

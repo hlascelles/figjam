@@ -28,3 +28,8 @@ appraise "psych-5.0" do
   gem "rails", "~> 7.0"
   gem "psych", "~> 5.0"
 end
+
+appraise "rails-8" do
+  gem "sqlite3", "~> 2.0"
+  gem "rails", "~> 8.0"
+end

@@ -39,9 +39,12 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "reek"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rubocop"
+  spec.add_development_dependency "rubocop-magic_numbers"
   spec.add_development_dependency "rubocop-performance"
-  spec.add_development_dependency "rubocop-rake"
-  spec.add_development_dependency "rubocop-rspec"
+  spec.add_development_dependency "rubocop-rails"
+  spec.add_development_dependency "rubocop-rake", "> 0.7.0" # as plugin
+  spec.add_development_dependency "rubocop-rspec", "> 3.5.0" # as plugin
+  spec.add_development_dependency "rubocop-thread_safety"
   spec.add_development_dependency "sqlite3"
 
   spec.files = Dir["{bin,lib}/**/*"] + ["README.md"]

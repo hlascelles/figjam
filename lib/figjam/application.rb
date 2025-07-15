@@ -69,7 +69,9 @@ module Figjam
     end
 
     private def parse(path)
-      (File.exist?(path) && load_yaml(ERB.new(File.read(path)).result)) || {} # nosemgrep
+      raise ArgumentError, "Figjam config path #{path} not found" unless File.exist?(path)
+
+      load_yaml(ERB.new(File.read(path)).result) # nosemgrep
     end
 
     # rubocop:disable Security/YAMLLoad
@@ -96,8 +98,8 @@ module Figjam
         non_string_configuration(value) unless value.is_a?(String) || value.nil?
       end
 
-      ::ENV[key.to_s] = value.nil? ? nil : value.to_s
-      ::ENV[FIGARO_ENV_PREFIX + key.to_s] = value.nil? ? nil : value.to_s
+      ::ENV[key.to_s] = value&.to_s
+      ::ENV[FIGARO_ENV_PREFIX + key.to_s] = value&.to_s
     end
 
     private def skip?(key)
