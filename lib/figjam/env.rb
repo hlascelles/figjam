@@ -29,11 +29,11 @@ module Figjam
       method.to_s.downcase.match(/^(.+?)([!?=])?$/).captures
     end
 
-    # rubocop:disable Naming/PredicateName
+    # rubocop:disable Naming/PredicatePrefix
     private def has_key?(key)
       ::ENV.any? { |k, _| k.downcase == key }
     end
-    # rubocop:enable Naming/PredicateName
+    # rubocop:enable Naming/PredicatePrefix
 
     private def missing_key!(key)
       raise MissingKey, key

@@ -1,7 +1,11 @@
-## 1.6.2 (2024-09-10)
+## 2.1.0 (2025-07-15)
+
+- Raise exception if config path is invalid [#223](https://github.com/hlascelles/figjam/pull/223)
+
+## 2.0.1 (2025-06-03)
 
 - Adding trusted publishing [#216](https://github.com/hlascelles/figjam/pull/216)
- 
+
 ## 2.0.0 (2025-04-12)
 
 BREAKING CHANGE:
