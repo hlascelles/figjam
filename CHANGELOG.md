@@ -1,3 +1,7 @@
+## 2.2.0 (2025-07-16)
+
+- Add Rails Engine helper [#224](https://github.com/hlascelles/figjam/pull/224)
+
 ## 2.1.0 (2025-07-15)
 
 - Raise exception if config path is invalid [#223](https://github.com/hlascelles/figjam/pull/223)
