@@ -59,14 +59,25 @@ overrides.
 
 Figjam is perfect for Rails engines. They can have their own configuration file, and
 they can be loaded independently or in addition of the main application. To do this,
-you can create a `config/application.yml` file in your engine, and add this initializer:
+you can create a `config/application.yml` file in your engine, and add this to the `Rails::Engine`:
 
 ```ruby
-Figjam::Application.new(
-  environment: ::Rails.env,
-  path: File.expand_path("../application.yml", __dir__)
-).load
+module MyEngine
+  class Engine < ::Rails::Engine
+    Figjam::Rails::Engine.configure(self)
+  end
+end
+
+# Or if you wish to pass in a specific value for the environment:
+module MyEngine
+  class Engine < ::Rails::Engine
+    Figjam::Rails::Engine.configure(self, "my_engine_environment")
+  end
+end
 ```
+
+This will ensure that the engine's configuration is loaded when the Rails application starts, and
+before any other initializers run.
 
 ### Usage without Rails
 
