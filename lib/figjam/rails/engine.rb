@@ -1,3 +1,5 @@
+require_relative "../application"
+
 module Figjam
   module Rails
     module Engine

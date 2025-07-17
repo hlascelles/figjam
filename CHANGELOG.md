@@ -1,3 +1,7 @@
+## 2.2.1 (2025-07-17)
+
+- Add require in engine helper [#225](https://github.com/hlascelles/figjam/pull/225)
+
 ## 2.2.0 (2025-07-16)
 
 - Add Rails Engine helper [#224](https://github.com/hlascelles/figjam/pull/224)
