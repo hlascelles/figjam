@@ -62,15 +62,13 @@ they can be loaded independently or in addition of the main application. To do t
 you can create a `config/application.yml` file in your engine, and add this to the `Rails::Engine`:
 
 ```ruby
+require "figjam/rails/engine"
+
 module MyEngine
   class Engine < ::Rails::Engine
     Figjam::Rails::Engine.configure(self)
-  end
-end
-
-# Or if you wish to pass in a specific value for the environment:
-module MyEngine
-  class Engine < ::Rails::Engine
+    
+    # Or if you wish to pass in a specific value for the environment:
     Figjam::Rails::Engine.configure(self, "my_engine_environment")
   end
 end
@@ -86,6 +84,8 @@ do this as many times as you like. If you have multiple internal gems, they can
 all use `figjam` to load their own configuration independently.
 
 ```ruby
+require "figjam/application"
+
 Figjam::Application.new(
   environment: "some_environment_key",
   path: "#{__dir__}/application.yml"
