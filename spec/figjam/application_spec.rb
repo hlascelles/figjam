@@ -228,6 +228,18 @@ describe Figjam::Application do
       )
     end
 
+    it "does not puts info message if FIGJAM_SILENCE_INFO_MESSAGES ENV var is true" do
+      ::ENV["FOO"] = "baz"
+      ::ENV["FIGJAM_SILENCE_INFO_MESSAGES"] = "true"
+      allow(application).to receive(:configuration).and_return({ "FOO" => "bar" })
+
+      expect(application).not_to receive(:puts)
+
+      application.load
+
+      ::ENV.delete("FIGJAM_SILENCE_INFO_MESSAGES")
+    end
+
     it "sets keys that have already been set internally" do
       application.load
 

@@ -113,11 +113,16 @@ module Figjam
       }
     end
 
+    private def info_messages_silenced?
+      %w[1 true TRUE].include?(Figjam.env.figjam_silence_info_messages)
+    end
+
     private def non_string_configuration(value)
       warn "WARNING: Use strings for Figjam configuration. #{value.inspect} was converted to #{value.to_s.inspect}." # rubocop:disable Layout/LineLength
     end
 
     private def key_skipped(key)
+      return if info_messages_silenced?
       puts "INFO: Skipping key #{key.inspect}. Already set in ENV."
     end
 
