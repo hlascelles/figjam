@@ -131,7 +131,7 @@ Note, secrets are not to be provided by figjam, so do not add them to your `appl
 
 Deeply nested configuration structures are not possible.
 
-## Silencing type conversion warnings
+## Debugging Figjam
 
 Remember that `ENV` in ruby is a simple key/value store. All values will always be strings.
 This means that the following code will produce string values:
@@ -142,21 +142,18 @@ SOME_BOOLEAN: true
 ```
 
 ```ruby
-# WARNING: Use strings for Figjam configuration. 3 was converted to "3"
-# WARNING: Use strings for Figjam configuration. true was converted to "true"
-
 ENV["SOME_NUMBER"] == 3 # => false
 ENV["SOME_NUMBER"] == "3" # => true
 ENV["SOME_BOOLEAN"] == true # => false
 ENV["SOME_BOOLEAN"] == "true" # => true
 ```
 
-Because this is a possible cause of sleeper bugs, Figjam emits a warning when it does this
-conversion to a string. If you are confident in your abilities, you can silence it by adding this
-to the top of your `application.yml`:
+If you are unsure about how figjam is loading your configuration, you can enable warnings
+about type conversion and pre-existing ENV by setting the `FIGJAM_DEBUG` environment variable
+to `true`.
 
 ```yaml
-FIGJAM_SILENCE_STRING_WARNINGS: true
+FIGJAM_DEBUG: true
 ```
 
 ### Using `Figjam.env`

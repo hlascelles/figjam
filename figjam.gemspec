@@ -29,6 +29,7 @@ Gem::Specification.new do |spec|
   # Ruby 3.4 needs this gem for specs, otherwise we see "cannot load such file -- base64"
   spec.add_development_dependency "base64"
   spec.add_development_dependency "bundler"
+  spec.add_development_dependency "climate_control"
   spec.add_development_dependency "combustion"
   spec.add_development_dependency "fasterer"
   # Ruby 3.4 needs this gem for specs, otherwise we see "cannot load such file -- mutex_m"

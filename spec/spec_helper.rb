@@ -6,6 +6,7 @@ Combustion.initialize!
 
 require "figjam"
 require "pry-byebug"
+require "climate_control"
 
 Bundler.require(:test)
 

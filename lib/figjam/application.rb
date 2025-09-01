@@ -8,11 +8,6 @@ module Figjam
   # :reek:TooManyMethods
   class Application
     FIGARO_ENV_PREFIX = "_FIGARO_".freeze
-    SILENCE_STRING_WARNINGS_KEYS = %i[
-      FIGARO_SILENCE_STRING_WARNINGS
-      FIGJAM_SILENCE_STRING_WARNINGS
-    ].freeze
-
     include Enumerable
 
     def initialize(options = {})
@@ -93,10 +88,8 @@ module Figjam
     end
 
     private def set(key, value)
-      unless non_string_warnings_silenced?
-        non_string_configuration(key) unless key.is_a?(String)
-        non_string_configuration(value) unless value.is_a?(String) || value.nil?
-      end
+      non_string_configuration(key) unless key.is_a?(String)
+      non_string_configuration(value) unless value.is_a?(String) || value.nil?
 
       ::ENV[key.to_s] = value&.to_s
       ::ENV[FIGARO_ENV_PREFIX + key.to_s] = value&.to_s
@@ -106,24 +99,16 @@ module Figjam
       ::ENV.key?(key.to_s) && !::ENV.key?(FIGARO_ENV_PREFIX + key.to_s)
     end
 
-    private def non_string_warnings_silenced?
-      SILENCE_STRING_WARNINGS_KEYS.any? { |key|
-        # Allow the silence configuration itself to use non-string keys/values.
-        configuration.values_at(key.to_s, key).any? { |cv| cv.to_s == "true" }
-      }
-    end
-
-    private def info_messages_silenced?
-      %w[1 true TRUE].include?(Figjam.env.figjam_silence_info_messages)
-    end
-
     private def non_string_configuration(value)
-      warn "WARNING: Use strings for Figjam configuration. #{value.inspect} was converted to #{value.to_s.inspect}." # rubocop:disable Layout/LineLength
+      return unless ::ENV["FIGJAM_DEBUG"] == "true"
+
+      warn "FIGJAM: Use strings for Figjam configuration. #{value.inspect} was converted to #{value.to_s.inspect}." # rubocop:disable Layout/LineLength
     end
 
     private def key_skipped(key)
-      return if info_messages_silenced?
-      puts "INFO: Skipping key #{key.inspect}. Already set in ENV."
+      return unless ::ENV["FIGJAM_DEBUG"] == "true"
+
+      puts "FIGJAM: Skipping key #{key.inspect}. Already set in ENV."
     end
 
     private def valid_key_name?(key)

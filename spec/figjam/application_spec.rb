@@ -214,30 +214,32 @@ describe Figjam::Application do
     end
 
     it "skips keys (and warns) that have already been set externally" do
-      ::ENV["FOO"] = "baz"
+      ClimateControl.modify(FOO: "baz") do
+        expect(application).not_to receive(:puts)
 
-      expect(application)
-        .to receive(:puts).with('INFO: Skipping key "FOO". Already set in ENV.')
-
-      expect {
-        application.load
-      }.not_to(
-        change {
-          ::ENV["FOO"]
-        }
-      )
+        expect {
+          application.load
+        }.not_to(
+          change {
+            ::ENV["FOO"]
+          }
+        )
+      end
     end
 
-    it "does not puts info message if FIGJAM_SILENCE_INFO_MESSAGES ENV var is true" do
-      ::ENV["FOO"] = "baz"
-      ::ENV["FIGJAM_SILENCE_INFO_MESSAGES"] = "true"
-      allow(application).to receive(:configuration).and_return({ "FOO" => "bar" })
+    it "skips keys that have already been set externally without warning" do
+      ClimateControl.modify(FOO: "baz", FIGJAM_DEBUG: "true") do
+        expect(application)
+          .to receive(:puts).with('FIGJAM: Skipping key "FOO". Already set in ENV.')
 
-      expect(application).not_to receive(:puts)
-
-      application.load
-
-      ::ENV.delete("FIGJAM_SILENCE_INFO_MESSAGES")
+        expect {
+          application.load
+        }.not_to(
+          change {
+            ::ENV["FOO"]
+          }
+        )
+      end
     end
 
     it "sets keys that have already been set internally" do
@@ -271,59 +273,6 @@ describe Figjam::Application do
       }.to change {
         [::ENV["FOO"], ::ENV["BAR_BAZ"]]
       }.from([nil, nil]).to(%w[bar qux])
-    end
-
-    shared_examples "correct warning with and without silence override" do
-      [
-        { FIGARO_SILENCE_STRING_WARNINGS: true },
-        { "FIGARO_SILENCE_STRING_WARNINGS" => true },
-        { FIGARO_SILENCE_STRING_WARNINGS: "true" },
-        { "FIGARO_SILENCE_STRING_WARNINGS" => "true" },
-        { FIGJAM_SILENCE_STRING_WARNINGS: true },
-        { "FIGJAM_SILENCE_STRING_WARNINGS" => true },
-        { FIGJAM_SILENCE_STRING_WARNINGS: "true" },
-        { "FIGJAM_SILENCE_STRING_WARNINGS" => "true" },
-      ].each do |override|
-        it "does not warn with override #{override.inspect}" do
-          allow(application).to receive(:configuration) { config.merge(override) }
-
-          expect(application).not_to receive(:warn)
-
-          application.load
-        end
-      end
-
-      [
-        [{}, 1],
-        [{ "FIGARO_SILENCE_STRING_WARNINGS" => false }, 2],
-        [{ FIGARO_SILENCE_STRING_WARNINGS: false }, 3],
-        [{ "FIGARO_SILENCE_STRING_WARNINGS" => "false" }, 1],
-        [{ FIGARO_SILENCE_STRING_WARNINGS: "false" }, 2],
-        [{ "FIGJAM_SILENCE_STRING_WARNINGS" => false }, 2],
-        [{ FIGJAM_SILENCE_STRING_WARNINGS: false }, 3],
-        [{ "FIGJAM_SILENCE_STRING_WARNINGS" => "false" }, 1],
-        [{ FIGJAM_SILENCE_STRING_WARNINGS: "false" }, 2],
-      ].each do |override, expected_warning_count|
-        it "warns #{expected_warning_count} times with override #{override.inspect}" do
-          allow(application).to receive(:configuration) { config.merge(override) }
-
-          expect(application).to receive(:warn).exactly(expected_warning_count).times
-
-          application.load
-        end
-      end
-    end
-
-    context "when warning when a key isn't a string" do
-      let(:config) { { SYMBOL_KEY: "string value" } }
-
-      it_behaves_like "correct warning with and without silence override"
-    end
-
-    context "when warning when a value isn't a string" do
-      let(:config) { { "STRING_KEY" => :SYMBOL_VALUE } }
-
-      it_behaves_like "correct warning with and without silence override"
     end
 
     it "allows nil values" do
