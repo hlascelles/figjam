@@ -1,3 +1,8 @@
+## 3.0.0 (2025-09-01)
+
+⚠️ Breaking (debug) change
+- Change debug lines to opt in with FIGJAM_DEBUG=true [#231](https://github.com/hlascelles/figjam/pull/231)
+
 ## 2.2.1 (2025-07-17)
 
 - Add require in engine helper [#225](https://github.com/hlascelles/figjam/pull/225)
