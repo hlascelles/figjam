@@ -5,6 +5,7 @@ require "combustion"
 Combustion.initialize!
 
 require "figjam"
+require "rb-readline"
 require "pry-byebug"
 require "climate_control"
 
