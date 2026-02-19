@@ -34,9 +34,11 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "fasterer"
   # Ruby 3.4 needs this gem for specs, otherwise we see "cannot load such file -- mutex_m"
   spec.add_development_dependency "mutex_m"
+  spec.add_development_dependency "ostruct" # Require for testing on ruby 4.0
   spec.add_development_dependency "pry-byebug"
   spec.add_development_dependency "rails"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rb-readline" # Require for testing on ruby 4.0
   spec.add_development_dependency "reek"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "rubocop"
